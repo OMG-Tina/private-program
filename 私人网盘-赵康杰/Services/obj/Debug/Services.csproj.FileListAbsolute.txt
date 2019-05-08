@@ -1,0 +1,10 @@
+E:\C#项目\private-program\私人网盘-赵康杰\Services\bin\Debug\Services.dll
+E:\C#项目\private-program\私人网盘-赵康杰\Services\bin\Debug\Services.pdb
+E:\C#项目\private-program\私人网盘-赵康杰\Services\bin\Debug\EntityFramework.dll
+E:\C#项目\private-program\私人网盘-赵康杰\Services\bin\Debug\EntityFramework.xml
+E:\C#项目\private-program\私人网盘-赵康杰\Services\bin\Debug\zh-Hans\EntityFramework.resources.dll
+E:\C#项目\private-program\私人网盘-赵康杰\Services\obj\Debug\Services.csprojResolveAssemblyReference.cache
+E:\C#项目\private-program\私人网盘-赵康杰\Services\obj\Debug\Services.dll
+E:\C#项目\private-program\私人网盘-赵康杰\Services\obj\Debug\Services.pdb
+E:\C#项目\private-program\私人网盘-赵康杰\Services\bin\Debug\Model.dll
+E:\C#项目\private-program\私人网盘-赵康杰\Services\bin\Debug\Model.pdb

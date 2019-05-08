@@ -1,0 +1,144 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>修改密码</title>
+    <link href="~/Content/Denglu.css" rel="stylesheet" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="fdiv">
+        <div style="padding:20px 0 0 20px;" class="testdiv">
+            <img src="~/Icon/logo (2).png" />
+            &nbsp; &nbsp;
+            <a href="" style="color:white;font-size:25px">赵康杰的个人网盘</a>
+        </div>
+
+
+        <div class="denglu">
+            <div style="text-align:center;padding-top:15px;">
+                <h1>修改密码</h1>
+            </div>
+            <div style="margin-top:30px;">
+                <form class="layui-form" action="" method="post" id="form">
+                    <div class="layui-form-item" style="margin-top:40px;">
+                        <label class=" layui-form-label">
+                            旧密码
+                        </label>
+                        <div class="layui-input-inline oddpwddiv">
+                            <input type="password" name="Odd_Password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input oddpwd">
+                           
+                        </div>
+
+                    </div>
+                    <div class="layui-form-item" style="margin-top:40px;">
+                        <label class=" layui-form-label">
+                            新密码
+                        </label>
+                        <div class="layui-input-inline">
+                            <input type="password" name="New_Password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input newpwd">
+                        </div>
+                        
+                    </div>
+                    
+                </form>
+                <div class="layui-form-item" style="margin-top:50px;">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" id="bc" onclick="BaoCun()">保存</button>
+                        <button type="button" class="layui-btn layui-btn-primary chongzhi">重置</button>
+                    </div>
+                </div>
+                   
+               
+            </div>
+
+
+        </div>
+        <div class="dibu">
+            <h1>Zhao Kangjie's &nbsp;   Personal &nbsp;  Network</h1>
+        </div>
+               
+    </div>
+    <script src="~/layui/layui.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script>
+        var element;
+        var form;
+        layui.use(['element','form'], function () {
+            element = layui.element,
+                form = layui.form;
+        $(function () {
+            $(".oddpwd").blur(function () {
+                var oddpwd = $(this).val();
+                $(".tishi").remove();;
+                //alert(oddpwd);
+                $.ajax({
+                    url: "/Home/VerifyPassword",
+                    data: JSON.stringify({ "UserPwd": oddpwd }),
+                    type: "post",
+                    contentType: "application/json",
+                    success: function (data) {
+                        
+                        if (data=="1") {
+
+                            $(".oddpwddiv").append("<div style='margin-top:15px;'><span style='color:green' class='tishi'>旧密码正确</span></div>");
+                            $("#bc").removeAttr("disabled");//启用按钮
+                            
+                        }
+                        else {
+                            $(".oddpwddiv").append("<div style='margin-top:15px;'><span style='color:red' class='tishi'>旧密码错误</span></div>");
+                            $("#bc").attr("disabled", "true");//禁用按钮
+                        }
+                    }, error: function (result) {
+                        alert("Error" + result.responseText);
+                    }
+                });
+            });
+
+            $(".chongzhi").click(function () {
+                $("[type=password]").val("");
+                $(".tishi").remove();
+            });;
+
+
+        });
+        });
+
+
+        function BaoCun() {
+            var oddpwd = $(".oddpwd").val();
+            var newpwd = $(".newpwd").val();
+
+            if (newpwd != null && newpwd != "") {
+                layer.msg('正在修改,请稍后...', { offset: '10px', time: 1000 }, function () {
+                    //do something
+                    $.ajax({
+                        url: "/Home/UpdatePwds",
+                        data: JSON.stringify({ "NewPwd": newpwd }),
+                        type: "post",
+                        contentType: "application/json",
+                        success: function (data) {
+                            if (data == "1") {
+                                layer.msg('✓ 修改成功', { offset: '10px', time: 1000 }, function () {
+                                    window.location.reload();
+                                });
+                            }
+
+                        }, error: function (result) {
+                            alert("Error" + result.responseText);
+                        }
+                    });
+                });
+            } else {
+                alert("请将密码填写完整");
+            }
+
+
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>登录</title>
+    <link href="~/Content/Denglu.css" rel="stylesheet" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="fdiv">
+        <div style="padding:20px 0 0 20px;" class="testdiv">
+            <img src="~/Icon/logo (2).png" />
+            &nbsp; &nbsp;
+            <a href="" style="color:white;font-size:25px">赵康杰的个人网盘</a>
+        </div>
+
+        
+        <div class="denglu">
+            <div style="text-align:center;padding-top:15px;">
+                <h1>账号登录</h1>
+            </div>
+            <div style="margin-top:30px;">
+                <form class="layui-form" action="" method="post">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">账号</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="User_Name" required lay-verify="required" placeholder="请输入账号" autocomplete="off" class="layui-input" style="width:190px;">
+                        </div>
+                    </div>
+                    <div class="layui-form-item" style="margin-top:40px;">
+                        <label class=" layui-form-label">
+                            密码
+                        </label>
+                        <div class="layui-input-inline">
+                            <input type="password" name="User_Password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                        </div>
+
+                    </div>
+                    <div class="layui-form-item" style="margin-top:50px;">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit lay-filter="formDemo" type="submit">立即登录</button>
+                            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                        </div>
+                    </div>
+
+                    <div style="padding-left:20px;padding-top:20px;">
+                        <a href="javascript:;" onclick="tozhuce()">还没账号?去注册</a>
+                    </div>
+                </form>
+            </div>
+
+
+        </div>
+        <div class="dibu">
+            <h1>Zhao Kangjie's &nbsp;   Personal &nbsp;  Network</h1>
+        </div>
+        <script>
+                //Demo
+                layui.use('form', function(){
+                  var form = layui.form;
+
+                  //监听提交
+                  form.on('submit(formDemo)', function(data){
+                    layer.msg(JSON.stringify(data.field));
+                    return false;
+                  });
+                });
+
+                function tozhuce() {
+                    window.open("/Denglu/zhuce");
+                }
+        </script>
+
+    </div>
+</body>
+</html>

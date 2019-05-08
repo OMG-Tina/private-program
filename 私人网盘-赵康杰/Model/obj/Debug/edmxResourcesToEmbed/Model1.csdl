@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ZKJSkyDriveModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Folder">
+    <Key>
+      <PropertyRef Name="Folder_ID" />
+    </Key>
+    <Property Name="Folder_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FounderID" Type="Int32" Nullable="false" />
+    <Property Name="Folder_Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="FatherFolderID" Type="Int32" Nullable="false" />
+    <Property Name="DeleteState" Type="Int32" Nullable="false" />
+    <Property Name="DeleteTime" Type="DateTime" Precision="3" />
+    <Property Name="EstablishTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="LastUpdate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="User" Relationship="Self.FK_Folder_User" FromRole="Folder" ToRole="User" />
+    <NavigationProperty Name="Store_data" Relationship="Self.FK_Store_data_Folder" FromRole="Folder" ToRole="Store_data" />
+  </EntityType>
+  <EntityType Name="Store_data">
+    <Key>
+      <PropertyRef Name="Store_data_ID" />
+    </Key>
+    <Property Name="Store_data_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="User_ID" Type="Int32" Nullable="false" />
+    <Property Name="DataRoute" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Real_FileName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="SuffixName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="File_Size" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Folder_ID" Type="Int32" Nullable="false" />
+    <Property Name="EstablishTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="LastUpdate" Type="DateTime" Precision="3" />
+    <Property Name="DeleteState" Type="Int32" Nullable="false" />
+    <Property Name="DeleteTime" Type="DateTime" Precision="3" />
+    <Property Name="icon" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Folder" Relationship="Self.FK_Store_data_Folder" FromRole="Store_data" ToRole="Folder" />
+    <NavigationProperty Name="User" Relationship="Self.FK_Store_data_User" FromRole="Store_data" ToRole="User" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="User_ID" />
+    </Key>
+    <Property Name="User_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="User_Name" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="User_Password" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Folders" Relationship="Self.FK_Folder_User" FromRole="User" ToRole="Folder" />
+    <NavigationProperty Name="Store_data" Relationship="Self.FK_Store_data_User" FromRole="User" ToRole="Store_data" />
+  </EntityType>
+  <Association Name="FK_Folder_User">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="Folder" Type="Self.Folder" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="User_ID" />
+      </Principal>
+      <Dependent Role="Folder">
+        <PropertyRef Name="FounderID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Store_data_Folder">
+    <End Role="Folder" Type="Self.Folder" Multiplicity="1" />
+    <End Role="Store_data" Type="Self.Store_data" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Folder">
+        <PropertyRef Name="Folder_ID" />
+      </Principal>
+      <Dependent Role="Store_data">
+        <PropertyRef Name="Folder_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Store_data_User">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="Store_data" Type="Self.Store_data" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="User_ID" />
+      </Principal>
+      <Dependent Role="Store_data">
+        <PropertyRef Name="User_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ZKJSkyDriveEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Folders" EntityType="Self.Folder" />
+    <EntitySet Name="Store_data" EntityType="Self.Store_data" />
+    <EntitySet Name="Users" EntityType="Self.User" />
+    <AssociationSet Name="FK_Folder_User" Association="Self.FK_Folder_User">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Folder" EntitySet="Folders" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Store_data_Folder" Association="Self.FK_Store_data_Folder">
+      <End Role="Folder" EntitySet="Folders" />
+      <End Role="Store_data" EntitySet="Store_data" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Store_data_User" Association="Self.FK_Store_data_User">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Store_data" EntitySet="Store_data" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

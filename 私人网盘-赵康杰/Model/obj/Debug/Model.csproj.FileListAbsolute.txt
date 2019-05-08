@@ -1,0 +1,11 @@
+E:\C#项目\private-program\私人网盘-赵康杰\Model\bin\Debug\Model.dll.config
+E:\C#项目\private-program\私人网盘-赵康杰\Model\bin\Debug\Model.dll
+E:\C#项目\private-program\私人网盘-赵康杰\Model\bin\Debug\Model.pdb
+E:\C#项目\private-program\私人网盘-赵康杰\Model\bin\Debug\EntityFramework.dll
+E:\C#项目\private-program\私人网盘-赵康杰\Model\bin\Debug\EntityFramework.SqlServer.dll
+E:\C#项目\private-program\私人网盘-赵康杰\Model\bin\Debug\EntityFramework.xml
+E:\C#项目\private-program\私人网盘-赵康杰\Model\bin\Debug\EntityFramework.SqlServer.xml
+E:\C#项目\private-program\私人网盘-赵康杰\Model\bin\Debug\zh-Hans\EntityFramework.resources.dll
+E:\C#项目\private-program\私人网盘-赵康杰\Model\obj\Debug\Model.csprojResolveAssemblyReference.cache
+E:\C#项目\private-program\私人网盘-赵康杰\Model\obj\Debug\Model.dll
+E:\C#项目\private-program\私人网盘-赵康杰\Model\obj\Debug\Model.pdb

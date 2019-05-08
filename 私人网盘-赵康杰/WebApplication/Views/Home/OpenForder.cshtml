@@ -1,0 +1,391 @@
+﻿@model List<Model.Store_data>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>百度网盘-全部文件</title>
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/Content/Home.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <style>
+        .Beautify-input {
+            height: 10px;
+            width: 200px;
+            border: 1px solid #ccc;
+            padding: 7px 0px;
+            border-radius: 3px;
+            padding-left: 5px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            border-color: #66afe9;
+            outline: 0;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+        }
+    </style>
+</head>
+<body>
+    <div id="background-div" class="f-div">
+        <div class="layui-layout layui-layout-admin">
+            <div class="layui-header" style="background-color:transparent;">
+                <div class="layui-logo" style="color:white"><img src="~/Icon/网盘 (2).png" />&nbsp;&nbsp;&nbsp; 赵康杰私人网盘</div>
+                <!-- 头部区域（可配合layui已有的水平导航） -->
+                <ul class="layui-nav layui-layout-left daohanglan-font">
+                    <li class="layui-nav-item"><a href="" style="color:white;font-size:16px">我的网盘</a></li>
+
+                </ul>
+                <ul class="layui-nav layui-layout-right">
+                    <li class="layui-nav-item">
+                        <a href="javascript:;">
+                            @ViewBag.User
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd><a href="javascript:;" onclick="toUpdatePwd()">修改密码</a></dd>
+
+                        </dl>
+                    </li>
+                    <li class="layui-nav-item"><a href="javascript:;" onclick="LoginOut()">退出登录</a></li>
+                </ul>
+            </div>
+
+            <div class="layui-side">
+                <div class="layui-side-scroll">
+                    <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+                    <ul class="layui-nav layui-nav-tree" lay-filter="test" style="background-color:transparent;text-align:center;padding-top:12px">
+                        <li class="layui-nav-item xuanxiang"><a href="javascript:;" onclick="all()">全部文件</a></li>
+                        <li class="layui-nav-item xuanxiang"><a href="javascript:;" onclick="img()">图片</a></li>
+                        <li class="layui-nav-item xuanxiang"><a href="javascript:;" onclick="txt()">文档</a></li>
+                        <li class="layui-nav-item xuanxiang"><a href="javascript:;" onclick="vedio()">视频</a></li>
+                        <li class="layui-nav-item xuanxiang"><a href="javascript:;" onclick="music()">音乐</a></li>
+                        <li class="layui-nav-item xuanxiang"><a href="javascript:;" onclick="qita()">其他</a></li>
+                        <li class="layui-nav-item xuanxiang"><a href="javascript:;" onclick="laji()">回收站</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="body-div">
+                <!-- 内容主体区域 -->
+                <div>
+                    <div class="operation">
+                        <div style="float:right">
+
+                        </div>
+                        <form method="post" class="" id="data_form" enctype="multipart/form-data" action="" name="form">
+                            <div style="padding: 20px;">
+
+                                <label for="lala" id="shangchuan" style="font-size:12px;padding:10px 30px;background-color:#3b8cff;color:white;border:none;border-radius:5px" name="file[]"><i class="layui-icon layui-icon-upload-drag"></i>上传</label>
+                                <input id="lala" class="qwer" title="点击选择文件" type="file" name="files[]" style="display: none;" />
+
+                                <label for="lala" style="font-size:12px;padding:10px 30px;border:1px solid #3b8cff;background-color:white;color:#3b8cff;border-radius:5px" name="file[]"><a href="javascript:;" onclick="addFolder()" style="color:#3b8cff"><i class="layui-icon layui-icon-add-circle"></i>新建文件夹</a></label>
+
+                            </div>
+
+
+
+
+                            <div style="padding-top:15px;">
+
+                                <div style="padding-left:20px;padding-bottom:10px;" class="shangyiji"><a href="/Home/Index" style="color:blue">全部文件</a> &nbsp;|&nbsp;</div>
+                                <div style="display:flex;border-bottom:1px solid #cbe6f5">
+                                    <div class="paixu" style="width:55%;min-height:25px;padding-top:10px;padding-left:20px">
+                                        <input type="checkbox" name="" title="" lay-skin="primary" onclick=selectall()>&nbsp;&nbsp; 文件名
+                                    </div>
+                                    <div class="paixu" style="width:15%;min-height:25px;padding-top:10px;padding-left:10px">大小</div>
+                                    <div class="paixu" style="width:30%;min-height:25px;padding-top:10px;padding-left:10px">修改日期</div>
+                                </div>
+                            </div>
+
+                            <div class="wenjianqu" style="overflow:auto; height:420px">
+
+                                <div class="tbodys">
+
+                                    @foreach (var item in ViewBag.Folder)
+                                    {
+                                        <div style="display:flex;border-bottom:1px solid #cbe6f5" class="paixu">
+                                            <div class="" style="width:55%;min-height:45px;padding-top:10px;padding-left:20px">
+                                                <input type="checkbox" name="a1" title="">
+                                                <a href="/Home/OpenForder?ID=@item.Folder_ID" onclick="OpenFolder('@item.Folder_ID')">
+                                                    <img src="~/Icon/Folder.png" />
+                                                    @item.Folder_Name
+                                                </a>
+                                            </div>
+                                            <div class="" style="width:15%;min-height:45px;padding-top:10px;padding-left:10px">-</div>
+                                            <div class="" style="width:30%;min-height:45px;padding-top:10px;padding-left:10px">@item.EstablishTime</div>
+                                        </div>
+                                    }
+
+                                    @foreach (var item in Model)
+                                    {
+                                        <div style="display:flex;border-bottom:1px solid #cbe6f5" class="paixu">
+                                            <div class="" style="width:55%;min-height:45px;padding-top:10px;padding-left:20px">
+                                                <input type="checkbox" name="a1" title="">
+                                                <a href="javascript:void">
+                                                    <img src="@item.icon" />
+                                                    @item.Real_FileName
+                                                </a>
+                                            </div>
+                                            <div class="" style="width:15%;min-height:45px;padding-top:10px;padding-left:10px">@item.File_Size</div>
+                                            <div class="" style="width:30%;min-height:45px;padding-top:10px;padding-left:10px">@item.EstablishTime</div>
+                                        </div>
+                                    }
+                                </div>
+
+                                <div class="s-shangchuan" style="width:95px;height:70px;border:1px solid #3b8cff;border-radius:4px;position:absolute;left:224px;top:104px;display:none;">
+                                    <div class="s-shangchuan-s1" style="height:25px;width:100%;text-align:center;padding-top:10px;background-color:white;">
+                                        <label for="lala" id="shangchuan" style="font-size:12px;color:#3b8cff;border:none;" name="file[]">上传文件</label>
+                                        <input id="lala" class="qwer" title="点击选择文件" type="file" name="files[]" style="display: none;" />
+                                    </div>
+                                    <div class="s-shangchuan-s2" style="height:25px;width:100%;text-align:center;background-color:white;padding-top:10px">
+                                        <label for="hhh" id="shangchuan" style="font-size:12px;color:#3b8cff;border:none;" name="file[]">上传文件夹</label>
+                                        <input id="hhh" class="qwer" title="点击选择文件" type="file" name="files[]" style="display: none;" multiple="multiple" webkitdirectory mozdirectory />
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+    <script>
+            $(function () {
+
+                var aa = $(".qwer");
+                // ①为input设定change事件
+
+                aa.change(function () {
+                    //    ②如果value不为空，调用文件加载方法
+                    if ($(this).val() != "") {
+                        //alert("你选择了文件");
+                        //触发表单的提交事件
+                        $("#data_form").submit();
+
+                    }
+                });
+
+                $(".xuanxiang").click(function () {
+
+                    $(this).css("background-color","#333");
+                });
+
+                var Height = $(window).height();
+                $(".body-div").css("min-height", Height * 0.9);
+                ////alert(Height);
+                //$("#background-div").css("min-height", Height);
+                $(window).resize(function () {
+                    var Height = $(window).height();
+                    var Width = $(window).width();
+                    //alert(Height+"+"+Width);
+                    $("#background-div").css("min-height", Height);
+                    //$("#background-div").css("max-height", Width);
+                    $(".body-div").css("min-height", Height * 0.9);
+                })
+                //background-color:#CBEDFF;
+                $(".paixu").hover(function () {
+                    $(this).css("background-color", "#CBEDFF");
+
+                }, function () {
+                    $(this).css("background-color", "white");
+                });
+
+                $("#shangchuan").hover(function () {
+                    $(".s-shangchuan").css("display", "block");
+
+                }, function () {
+                    //$(".s-shangchuan").css("display", "none");
+                });
+
+                $(".s-shangchuan").hover(function () {
+                    //$(".s-shangchuan").css("display", "block");
+
+                }, function () {
+                    $(".s-shangchuan").css("display", "none");
+                });
+
+                $(".s-shangchuan-s1").hover(function () {
+                    $(".s-shangchuan-s1").css("background-color", "#808080");
+
+                }, function () {
+                    $(".s-shangchuan-s1").css("background-color", "white");
+                });
+
+                $(".s-shangchuan-s2").hover(function () {
+                    $(".s-shangchuan-s2").css("background-color", "#808080");
+
+                }, function () {
+                    $(".s-shangchuan-s2").css("background-color", "white");
+                });
+
+            })
+
+
+        function selectall() {
+            //alert("dwadwd");
+            var obj = document.all.a1
+            for (i = 0; i < obj.length; i++)
+                obj[i].checked = (event.srcElement.checked) ? true : false
+        }
+
+
+
+        function OpenFolder(input) {
+            var data = sessionStorage.getItem("FID");
+            if (data != null) {
+                sessionStorage.removeItem("FID");
+                sessionStorage.setItem("FID", input);
+            } else {
+                sessionStorage.setItem("FID", input);
+            }
+
+            //alert(input);
+            //$.ajax({
+            //    url: "/Home/OpenFolder2",
+            //    data: JSON.stringify({ "FolderName": input }),
+            //    type: "post",
+            //    contentType: "application/json",
+            //    success: function (data) {
+            //        $(".tbodys").empty();
+            //        if (data != null) {
+
+            //            $.each(data, function () {
+
+            //                $(".tbodys").append("<div style='overflow:auto;display:flex;border-bottom:1px solid #cbe6f5' class='paixu'> \
+            //                                    <div class='' style='width:55%;min-height:45px;padding-top:10px;padding-left:20px'>\
+            //                                    <input type='checkbox' name='a1'/>\
+            //                                    <a href='javascript:void' class='Folder'><img src='/Icon/Folder.png'/>"+this.Folder_Name+"</a></div>\
+            //                                    <div class='' style='width:15%;min-height:45px;padding-top:10px;padding-left:10px'>-</div>\
+            //                                    <div class='' style='width:30%;min-height:45px;padding-top:10px;padding-left:10px'>"+this.EstablishTime+"</div>\
+            //                                ");
+
+
+            //            });
+
+            //            $.ajax({
+            //                url: "/Home/OpenFolder3",
+            //                data: JSON.stringify({ "FolderName": input }),
+            //                type: "post",
+            //                contentType: "application/json",
+            //                success: function (data) {
+            //                    if (data != null) {
+            //                        $.each(data, function () {
+            //                            $(".tbodys").append("<div style='overflow:auto;display:flex;border-bottom:1px solid #cbe6f5' class='paixu'> \
+            //                                    <div class='' style='width:55%;min-height:45px;padding-top:10px;padding-left:20px'>\
+            //                                    <input type='checkbox' name='a1'>\
+            //                                    <a href='javascript:void'>\
+            //                                    <img src='" + this.icon + "'/>"+this.Real_FileName+"</a></div>\
+            //                                    <div class='' style='width:15%;min-height:45px;padding-top:10px;padding-left:10px'>" + this.File_Size + "</div>\
+            //                                    <div class='' style='width:30%;min-height:45px;padding-top:10px;padding-left:10px'>"+ this.EstablishTime + "</div>\
+            //                                ");
+
+            //                        });
+
+
+            //                    }
+            //                    form.render();
+
+            //                }, error: function (result) {
+            //                    alert("Error" + result.responseText);
+            //                }
+            //            });
+
+            //            $(document).on("click", ".Folder", function () {
+            //                var input = $(this).text();
+            //                OpenFolder(input);
+
+            //            })
+            //        }
+            //        form.render();
+            //    }, error: function (result) {
+            //        alert("Error" + result.responseText);
+            //    }
+            //});
+
+        }
+
+
+        function addFolder() {
+            $(".addwjj").remove();
+            $(".tbodys").prepend("<div style='overflow:auto;display:flex;border-bottom:1px solid #cbe6f5' class='paixu addwjj'> \
+                                                <div class='' style='width:55%;min-height:45px;padding-top:10px;padding-left:20px'>\
+                                                <input type='checkbox' name='a1'>\
+                                                <img src='/Icon/Folder.png'/><input class='Beautify-input' value='新建文件夹'/>&nbsp;\
+                                                <a href='javascript:;' onclick='addFolderOk()'><i class='layui-icon layui-icon-ok'></i></a> &nbsp;\
+                                                <a href='javascript:;' onclick='addFolderNo()'><i class='layui-icon layui-icon-close'></i></a>\
+                                                </div>\
+                                                <div class='' style='width:15%;min-height:45px;padding-top:10px;padding-left:10px'>-</div>\
+                                                <div class='' style='width:30%;min-height:45px;padding-top:10px;padding-left:10px'>-</div>\
+                                            ");
+            $(".Beautify-input").select();
+            $(".Beautify-input").style.backgroundColor = '#0000FF';
+
+
+        }
+
+        function addFolderNo() {
+            $(".addwjj").remove();
+        }
+
+
+        function toUpdatePwd() {
+            window.open("/Home/UpdatePwd");
+        }
+
+        function LoginOut() {
+            if(confirm("确认退出当前账号吗？")){
+                window.location.href = "/Home/SignOut";
+            }
+        };
+    </script>
+
+
+    <script src="~/layer/layer.js"></script>
+    <script>
+        function addFolderOk() {
+            var Folder = $(".Beautify-input").val();
+            var Fid = sessionStorage.getItem("FID");
+            alert(Folder);
+            alert(Fid);
+            layer.msg('正在创建文件夹,请稍后...', { offset: '10px', time: 1000 }, function () {
+
+                $.ajax({
+                    url: "/Home/AddFolder",
+                    data: JSON.stringify({ "FolderName": Folder, "FatherFolderID": Fid }),
+                    type: "post",
+                    contentType: "application/json",
+                    success: function (data) {
+                        if (data != null) {
+                            layer.msg('✓ 新建文件夹成功', { offset: '10px', time: 1000 }, function () {
+                                //alert("cg");
+                                $(".addwjj").remove();
+                                $(".tbodys").prepend("<div style='display:flex;border-bottom:1px solid #cbe6f5' class='paixu'> \
+                                                <div class='' style='width:55%;min-height:45px;padding-top:10px;padding-left:20px'>\
+                                                <input type='checkbox' name='a1'>\
+                                                <img src='/Icon/Folder.png'/> " + Folder + "\
+                                                </div>\
+                                                <div class='' style='width:15%;min-height:45px;padding-top:10px;padding-left:10px'>-</div>\
+                                                <div class='' style='width:30%;min-height:45px;padding-top:10px;padding-left:10px'>-</div>\
+                                            ");
+                            });
+                        }
+
+                    }, error: function (result) {
+                        alert("Error" + result.responseText);
+                    }
+                });
+
+
+            });
+        }
+    </script>
+</body>
+</html>

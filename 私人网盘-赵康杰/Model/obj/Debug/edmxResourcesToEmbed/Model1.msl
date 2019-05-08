@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ZKJSkyDriveModelStoreContainer" CdmEntityContainer="ZKJSkyDriveEntities">
+    <EntitySetMapping Name="Folders">
+      <EntityTypeMapping TypeName="ZKJSkyDriveModel.Folder">
+        <MappingFragment StoreEntitySet="Folder">
+          <ScalarProperty Name="Folder_ID" ColumnName="Folder_ID" />
+          <ScalarProperty Name="FounderID" ColumnName="FounderID" />
+          <ScalarProperty Name="Folder_Name" ColumnName="Folder_Name" />
+          <ScalarProperty Name="FatherFolderID" ColumnName="FatherFolderID" />
+          <ScalarProperty Name="DeleteState" ColumnName="DeleteState" />
+          <ScalarProperty Name="DeleteTime" ColumnName="DeleteTime" />
+          <ScalarProperty Name="EstablishTime" ColumnName="EstablishTime" />
+          <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Store_data">
+      <EntityTypeMapping TypeName="ZKJSkyDriveModel.Store_data">
+        <MappingFragment StoreEntitySet="Store_data">
+          <ScalarProperty Name="Store_data_ID" ColumnName="Store_data_ID" />
+          <ScalarProperty Name="User_ID" ColumnName="User_ID" />
+          <ScalarProperty Name="DataRoute" ColumnName="DataRoute" />
+          <ScalarProperty Name="Real_FileName" ColumnName="Real_FileName" />
+          <ScalarProperty Name="SuffixName" ColumnName="SuffixName" />
+          <ScalarProperty Name="File_Size" ColumnName="File_Size" />
+          <ScalarProperty Name="Folder_ID" ColumnName="Folder_ID" />
+          <ScalarProperty Name="EstablishTime" ColumnName="EstablishTime" />
+          <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
+          <ScalarProperty Name="DeleteState" ColumnName="DeleteState" />
+          <ScalarProperty Name="DeleteTime" ColumnName="DeleteTime" />
+          <ScalarProperty Name="icon" ColumnName="icon" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="ZKJSkyDriveModel.User">
+        <MappingFragment StoreEntitySet="User">
+          <ScalarProperty Name="User_ID" ColumnName="User_ID" />
+          <ScalarProperty Name="User_Name" ColumnName="User_Name" />
+          <ScalarProperty Name="User_Password" ColumnName="User_Password" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

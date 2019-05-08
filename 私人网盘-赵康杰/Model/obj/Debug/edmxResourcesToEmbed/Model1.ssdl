@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ZKJSkyDriveModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Folder">
+    <Key>
+      <PropertyRef Name="Folder_ID" />
+    </Key>
+    <Property Name="Folder_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FounderID" Type="int" Nullable="false" />
+    <Property Name="Folder_Name" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="FatherFolderID" Type="int" Nullable="false" />
+    <Property Name="DeleteState" Type="int" Nullable="false" />
+    <Property Name="DeleteTime" Type="datetime" />
+    <Property Name="EstablishTime" Type="datetime" Nullable="false" />
+    <Property Name="LastUpdate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Store_data">
+    <Key>
+      <PropertyRef Name="Store_data_ID" />
+    </Key>
+    <Property Name="Store_data_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="User_ID" Type="int" Nullable="false" />
+    <Property Name="DataRoute" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="Real_FileName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="SuffixName" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="File_Size" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="Folder_ID" Type="int" Nullable="false" />
+    <Property Name="EstablishTime" Type="datetime" Nullable="false" />
+    <Property Name="LastUpdate" Type="datetime" />
+    <Property Name="DeleteState" Type="int" Nullable="false" />
+    <Property Name="DeleteTime" Type="datetime" />
+    <Property Name="icon" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="User_ID" />
+    </Key>
+    <Property Name="User_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="User_Name" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="User_Password" Type="varchar" MaxLength="20" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Folder_User">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="Folder" Type="Self.Folder" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="User_ID" />
+      </Principal>
+      <Dependent Role="Folder">
+        <PropertyRef Name="FounderID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Store_data_User">
+    <End Role="User" Type="Self.User" Multiplicity="1" />
+    <End Role="Store_data" Type="Self.Store_data" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="User_ID" />
+      </Principal>
+      <Dependent Role="Store_data">
+        <PropertyRef Name="User_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ZKJSkyDriveModelStoreContainer">
+    <EntitySet Name="Folder" EntityType="Self.Folder" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Store_data" EntityType="Self.Store_data" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="User" EntityType="Self.User" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Folder_User" Association="Self.FK_Folder_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="Folder" EntitySet="Folder" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Store_data_User" Association="Self.FK_Store_data_User">
+      <End Role="User" EntitySet="User" />
+      <End Role="Store_data" EntitySet="Store_data" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
