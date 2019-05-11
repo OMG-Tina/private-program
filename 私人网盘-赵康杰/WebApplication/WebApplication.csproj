@@ -109,6 +109,7 @@
     <Content Include="Icon\XLSX.png" />
     <Content Include="Icon\XSL.png" />
     <Content Include="Icon\ZIP.png" />
+    <Content Include="Icon\下载.png" />
     <Content Include="Icon\其他.png" />
     <Content Include="Icon\网盘 %281%29.png" />
     <Content Include="Icon\网盘 %282%29.png" />
@@ -260,6 +261,9 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Views\Home\UpdatePwd.cshtml" />
     <Content Include="Views\Home\OpenForder.cshtml" />
+    <Content Include="Views\Home\Picture.cshtml" />
+    <Content Include="Views\Home\Classification.cshtml" />
+    <Content Include="Views\Home\recycle.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

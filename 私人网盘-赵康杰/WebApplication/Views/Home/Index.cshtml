@@ -8,6 +8,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>私人网盘-全部文件</title>
+    
     <link href="~/layui/css/layui.css" rel="stylesheet" />
     <link href="~/Content/Home.css" rel="stylesheet" />
     <script src="~/Scripts/jquery-1.10.2.js"></script>
@@ -59,13 +60,13 @@
                 <div class="layui-side-scroll">
                     <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
                     <ul class="layui-nav layui-nav-tree" lay-filter="test" style="background-color:transparent;text-align:center;padding-top:12px">
-                        <li class="layui-nav-item xuanxiang"><a href="javascript:;" onclick="all()">全部文件</a></li>
-                        <li class="layui-nav-item xuanxiang"><a href="javascript:;" onclick="img()">图片</a></li>
-                        <li class="layui-nav-item xuanxiang"><a href="javascript:;" onclick="txt()">文档</a></li>
-                        <li class="layui-nav-item xuanxiang"><a href="javascript:;" onclick="vedio()">视频</a></li>
-                        <li class="layui-nav-item xuanxiang"><a href="javascript:;" onclick="music()">音乐</a></li>
-                        <li class="layui-nav-item xuanxiang"><a href="javascript:;" onclick="qita()">其他</a></li>
-                        <li class="layui-nav-item xuanxiang"><a href="javascript:;" onclick="laji()">回收站</a></li>
+                        <li class="layui-nav-item xuanxiang"><a href="/Home/Index">全部文件</a></li>
+                        <li class="layui-nav-item xuanxiang"><a href="/Home/Classification?Keyword=图片">图片</a></li>
+                        <li class="layui-nav-item xuanxiang"><a href="/Home/Classification?Keyword=文档">文档</a></li>
+                        <li class="layui-nav-item xuanxiang"><a href="/Home/Classification?Keyword=视频">视频</a></li>
+                        <li class="layui-nav-item xuanxiang"><a href="/Home/Classification?Keyword=音乐">音乐</a></li>
+                        <li class="layui-nav-item xuanxiang"><a href="/Home/Classification?Keyword=其他">其他</a></li>
+                        <li class="layui-nav-item xuanxiang"><a href="/Home/recycle">回收站</a></li>
                     </ul>
                 </div>
             </div>
@@ -83,8 +84,8 @@
                                 <label for="lala" id="shangchuan" style="font-size:12px;padding:10px 30px;background-color:#3b8cff;color:white;border:none;border-radius:5px" name="file[]"><i class="layui-icon layui-icon-upload-drag"></i>上传</label>
                                 <input id="lala" class="qwer" title="点击选择文件" type="file" name="files[]" style="display: none;" />
 
-                                <label for="lala" style="font-size:12px;padding:10px 30px;border:1px solid #3b8cff;background-color:white;color:#3b8cff;border-radius:5px" name="file[]"><a href="javascript:;" onclick="addFolder()" style="color:#3b8cff"><i class="layui-icon layui-icon-add-circle"></i>新建文件夹</a></label>
-
+                                @*<label  style="font-size:12px;padding:10px 30px;border:1px solid #3b8cff;background-color:white;color:#3b8cff;border-radius:5px" name="file[]"><a href="javascript:;" onclick="addFolder()" style="color:#3b8cff"><i class="layui-icon layui-icon-add-circle"></i>新建文件夹</a></label>*@
+                                <label  class="delete"  style="font-size:12px;padding:10px 30px;border:1px solid #3b8cff;background-color:white;color:#3b8cff;border-radius:5px;" name="file[]"><a href="javascript:;" onclick="DeleteFile()" style="color:#3b8cff"><i class="layui-icon layui-icon-delete"></i>删除</a></label>
                             </div>
 
 
@@ -97,7 +98,7 @@
                                     <div class="paixu" style="width:55%;min-height:25px;padding-top:10px;padding-left:20px">
                                         <input type="checkbox" name="" title="" lay-skin="primary" onclick=selectall()>&nbsp;&nbsp; 文件名
                                     </div>
-                                    <div class="paixu" style="width:15%;min-height:25px;padding-top:10px;padding-left:10px">大小</div>
+                                    <div class="paixu" style="width:15%;min-height:25px;padding-top:10px;padding-left:80px">大小</div>
                                     <div class="paixu" style="width:30%;min-height:25px;padding-top:10px;padding-left:10px">修改日期</div>
                                 </div>
                                 </div>
@@ -105,38 +106,57 @@
                                 <div class="wenjianqu" style="overflow:auto; height:420px">
 
                                     <div class="tbodys">
-
-                                        @foreach (var item in ViewBag.Folder)
-                                        {
-                                            <div style="display:flex;border-bottom:1px solid #cbe6f5" class="paixu">
-                                                <div class="" style="width:55%;min-height:45px;padding-top:10px;padding-left:20px">
-                                                    <input type="checkbox" name="a1" title="">
-                                                    <a href="/Home/OpenForder?ID=@item.Folder_ID" onclick="OpenFolder('@item.Folder_ID')">
-                                                        <img src="~/Icon/Folder.png" />
-                                                        @item.Folder_Name
-                                                    </a>
+                                        
+                                            @foreach (var item in ViewBag.Folder)
+                                            {
+                                                <div style="display:flex;border-bottom:1px solid #cbe6f5" class="paixu">
+                                                    <div class="" style="width:50%;min-height:45px;padding-top:10px;padding-left:20px">
+                                                        <input type="checkbox" name="a1" title="">
+                                                        <a href="/Home/OpenForder?ID=@item.Folder_ID" onclick="OpenFolder('@item.Folder_ID')">
+                                                            <img src="~/Icon/Folder.png" />
+                                                            @item.Folder_Name
+                                                        </a>
+                                                    </div>
+                                                    <div class="" style="width:5%;min-height:45px;padding-top:10px;padding-left:70px"><a class="xiazai" href="" style="display:none">下载</a></div>
+                                                    <div class="" style="width:15%;min-height:45px;padding-top:10px;padding-left:10px">-</div>
+                                                    <div class="" style="width:30%;min-height:45px;padding-top:10px;padding-left:10px">@item.EstablishTime</div>
                                                 </div>
-                                                <div class="" style="width:15%;min-height:45px;padding-top:10px;padding-left:10px">-</div>
-                                                <div class="" style="width:30%;min-height:45px;padding-top:10px;padding-left:10px">@item.EstablishTime</div>
-                                            </div>
-                                        }
+                                            }
+                                        <div id="layer-photos-demo" class="layer-photos-demo">
+                                            @foreach (var item in Model)
+                                            {
+                                                <div style="display:flex;border-bottom:1px solid #cbe6f5" class="paixu">
+                                                    <div class="" style="width:55%;min-height:45px;padding-top:10px;padding-left:20px">
+                                                        <input type="checkbox" name="a1" class="a1" title="" value="@item.Store_data_ID">
+                                                        <a href="javascript:void" onclick="">
+                                                            @if (@item.SuffixName == ".png" || @item.SuffixName == ".PNG")
+                                                            {
+                                                                <img  class="yulantu" layer-src="@item.DataRoute.Substring(@item.DataRoute.IndexOf("Upload"))" src="@item.icon" alt="@item.Real_FileName">
+                                                            }
+                                                            else
+                                                            {
+                                                                <img src="@item.icon" />
+                                                            }
+                                                            @item.Real_FileName
 
-                                        @foreach (var item in Model)
-                                        {
-                                            <div style="display:flex;border-bottom:1px solid #cbe6f5" class="paixu">
-                                                <div class="" style="width:55%;min-height:45px;padding-top:10px;padding-left:20px">
-                                                    <input type="checkbox" name="a1" title="">
-                                                    <a href="javascript:void">
-                                                        <img src="@item.icon" />
-                                                        @item.Real_FileName
-                                                    </a>
+                                                        </a>
+                                                       
+
+                                                    </div>
+                                                    <div class="" style="width:5%;min-height:45px;padding-top:10px;padding-left:20px"><a class="xiazai" href="/Home/Download?id=@item.Store_data_ID" style="display:none">下载</a></div>
+                                                    <div class="" style="width:15%;min-height:45px;padding-top:10px;padding-left:10px">@item.File_Size</div>
+                                                    <div class="" style="width:30%;min-height:45px;padding-top:10px;padding-left:10px">@item.EstablishTime</div>
                                                 </div>
-                                                <div class="" style="width:15%;min-height:45px;padding-top:10px;padding-left:10px">@item.File_Size</div>
-                                                <div class="" style="width:30%;min-height:45px;padding-top:10px;padding-left:10px">@item.EstablishTime</div>
-                                            </div>
-                                        }
+                                            }
+                                        </div>
                                     </div>
-
+                                    <script src="~/layer/layer.js"></script>
+                                    <script>
+                                        layer.photos({
+                                            photos: '#layer-photos-demo'
+                                            , anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+                                        });
+                                    </script>
                                     <div class="s-shangchuan" style="width:95px;height:70px;border:1px solid #3b8cff;border-radius:4px;position:absolute;left:224px;top:104px;display:none;">
                                         <div class="s-shangchuan-s1" style="height:25px;width:100%;text-align:center;padding-top:10px;background-color:white;">
                                             <label for="lala" id="shangchuan" style="font-size:12px;color:#3b8cff;border:none;" name="file[]">上传文件</label>
@@ -157,24 +177,25 @@
 
         </div>
     </div>
+    
+ 
     <script>
-            $(function () {
-                sessionStorage.removeItem("FID");
+        $(function () {
                 var aa = $(".qwer");
                 // ①为input设定change事件
-
+                
                 aa.change(function () {
                     if ($(this).val() != "") {
                         var file = $(this).val();
                         var fileName  = file.split("\\").pop();
-
                         //触发表单的提交事件
                         $("#data_form").submit();
                         var index = layer.load(2, { time: 10 * 1000, offset: ['20px', '570px'] });
                         layer.msg('正在上传:' + fileName, { offset: ['5px', '630px'], time: 10 * 1000 });
-                     
+                        
                     }
                 });
+
 
                 $(".xuanxiang").click(function () {
                    
@@ -196,9 +217,11 @@
                 //background-color:#CBEDFF;
                 $(".paixu").hover(function () {
                     $(this).css("background-color", "#CBEDFF");
-
+                    $(".xiazai",this).css("display", "block");
+                    
                 }, function () {
                     $(this).css("background-color", "white");
+                    $(".xiazai",this).css("display", "none");
                 });
 
                 $("#shangchuan").hover(function () {
@@ -231,23 +254,22 @@
 
             })
 
-        function remvoeFIdSession() {
-            sessionStorage.removeItem("FID");
-        };
-
+        
 
         function selectall() {
             //alert("dwadwd");
             var obj = document.all.a1
             for (i = 0; i < obj.length; i++)
                 obj[i].checked = (event.srcElement.checked) ? true : false
+            //obj[i].checked = (event.srcElement.checked) ? $(".delete").show() : $(".delete").hide()
+            
         }
 
-
-
         function OpenFolder(input) {
+            aler(input);
             var url = window.location.href;
             var data = sessionStorage.getItem("FID");
+            alert(data);
             if (data != null) {
                 sessionStorage.removeItem("FID");
                 sessionStorage.setItem("FID", input);
@@ -339,6 +361,14 @@
     <script src="~/layer/layer.js"></script>
     <script>
 
+        function yulan(input) {
+            alert(input);
+            if (input == ".png" || input == ".PNG") {
+                alert("进来了");
+                $(".yulantu").trigger('click');
+            }
+        }
+
         function addFolder() {
             $(".addwjj").remove();
             $(".tbodys").prepend("<div style='overflow:auto;display:flex;border-bottom:1px solid #cbe6f5' class='paixu addwjj'> \
@@ -361,11 +391,56 @@
             $(".addwjj").remove();
         }
 
+        function DeleteFile() {
+            obj = document.getElementsByName("a1");
+            check_val = [];
+            for (k in obj) {
+                if (obj[k].checked)
+                    check_val.push(obj[k].value);
+            }
+            //alert(check_val);
+            if (check_val != null && check_val != "") {
+                if (confirm("确认要把所选文件放入回收站吗？")) {
+                    layer.msg('正在删除文件,请稍后...', { offset: '10px', time: 1000 }, function () {
+
+                        $.ajax({
+                            url: "/Home/UpdateFile",
+                            data: JSON.stringify({ "FileID": check_val }),
+                            type: "post",
+                            contentType: "application/json",
+                            success: function (data) {
+                                if (data > 0) {
+                                    layer.msg('✓ 删除成功', { offset: '10px', time: 1000 }, function () {
+                                        window.location.reload();
+                                    });
+                                }
+                                else {
+                                    layer.msg('删除失败', { offset: '10px', time: 1000 }, function () {
+                                        window.location.reload();
+                                    });
+                                }
+
+
+
+                            }, error: function (result) {
+                                alert("Error" + result.responseText);
+                            }
+
+                        });
+                    });
+                }
+                
+            }
+            else {
+                alert("请选择要删除的文件");
+            }
+        }
+
         function addFolderOk() {
             var Folder = $(".Beautify-input").val();
             var Fid = sessionStorage.getItem("FID");
-            alert(Folder);
-            alert(Fid);
+            //alert(Folder);
+            //alert(Fid);
             layer.msg('正在创建文件夹,请稍后...', { offset: '10px', time: 1000 }, function () {
 
                 $.ajax({
@@ -404,6 +479,16 @@
                 });
             });
         }
+    </script>
+
+    <script src="~/layui/layui.js"></script>
+    <script>
+        //JavaScript代码区域
+        layui.use('element', function () {
+            var element = layui.element;
+
+        });
+
     </script>
 </body>
 </html>

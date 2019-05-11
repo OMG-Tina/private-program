@@ -1,0 +1,117 @@
+﻿
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>私人网盘-全部文件</title>
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/Content/Home.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+</head>
+<body>
+    <div id="background-div" class="f-div">
+        <div class="layui-layout layui-layout-admin">
+            <div class="layui-header" style="background-color:transparent;">
+                <div class="layui-logo" style="color:white"><img src="~/Icon/网盘 (2).png" />&nbsp;&nbsp;&nbsp; 赵康杰私人网盘</div>
+                <!-- 头部区域（可配合layui已有的水平导航） -->
+                <ul class="layui-nav layui-layout-left daohanglan-font">
+                    <li class="layui-nav-item"><a href="" style="color:white;font-size:16px">我的网盘</a></li>
+
+                </ul>
+                <ul class="layui-nav layui-layout-right">
+                    <li class="layui-nav-item">
+                        <a href="javascript:;">
+                            哈哈
+                            @*@ViewBag.User*@
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd><a href="javascript:;" onclick="toUpdatePwd()">修改密码</a></dd>
+
+                        </dl>
+                    </li>
+                    <li class="layui-nav-item"><a href="javascript:;" onclick="LoginOut()">退出登录</a></li>
+                </ul>
+            </div>
+
+            <div class="layui-side">
+                <div class="layui-side-scroll">
+                    <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+                    <ul class="layui-nav layui-nav-tree" lay-filter="test" style="background-color:transparent;text-align:center;padding-top:12px">
+                        <li class="layui-nav-item xuanxiang"><a href="/Home/Index">全部文件</a></li>
+                        <li class="layui-nav-item xuanxiang"><a href="/Home/Picture">图片</a></li>
+                        <li class="layui-nav-item xuanxiang"><a href="/Home/Classification?Keyword=文档">文档</a></li>
+                        <li class="layui-nav-item xuanxiang"><a href="/Home/Classification?Keyword=视频">视频</a></li>
+                        <li class="layui-nav-item xuanxiang"><a href="/Home/Classification?Keyword=音乐">音乐</a></li>
+                        <li class="layui-nav-item xuanxiang"><a href="/Home/Classification?Keyword=其他">其他</a></li>
+                        <li class="layui-nav-item xuanxiang"><a href="/Home/recycle">回收站</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="body-div">
+                <!-- 内容主体区域 -->
+                <div>
+                    <div class="operation">
+                            <div class="wenjianqu" style="overflow:auto; height:420px">
+
+                                <div class="tbodys">
+
+                                   
+                                       
+                                  
+                                </div>
+
+                                
+                            </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+    <script src="~/layui/layui.js"></script>
+    <script>
+        //JavaScript代码区域
+        layui.use('element', function () {
+            var element = layui.element;
+
+        });
+    </script>
+    <script>
+        $(function () {
+           
+
+            var Height = $(window).height();
+            $(".body-div").css("min-height", Height * 0.9);
+            ////alert(Height);
+            //$("#background-div").css("min-height", Height);
+            $(window).resize(function () {
+                var Height = $(window).height();
+                var Width = $(window).width();
+                //alert(Height+"+"+Width);
+                $("#background-div").css("min-height", Height);
+                //$("#background-div").css("max-height", Width);
+                $(".body-div").css("min-height", Height * 0.9);
+            })
+          
+
+        })
+
+        function toUpdatePwd() {
+            window.open("/Home/UpdatePwd");
+        }
+
+        function LoginOut() {
+            if (confirm("确认退出当前账号吗？")) {
+                window.location.href = "/Home/SignOut";
+            }
+        };
+    </script>
+</body>
+</html>

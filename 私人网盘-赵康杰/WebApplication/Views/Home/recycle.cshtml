@@ -1,0 +1,378 @@
+﻿@model List<Model.Store_data>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>私人网盘-全部文件</title>
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
+    <link href="~/Content/Home.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <style>
+        .Beautify-input {
+            height: 10px;
+            width: 200px;
+            border: 1px solid #ccc;
+            padding: 7px 0px;
+            border-radius: 3px;
+            padding-left: 5px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            border-color: #66afe9;
+            outline: 0;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+        }
+    </style>
+</head>
+<body>
+    <div id="background-div" class="f-div">
+        <div class="layui-layout layui-layout-admin">
+            <div class="layui-header" style="background-color:transparent;">
+                <div class="layui-logo" style="color:white"><img src="~/Icon/网盘 (2).png" />&nbsp;&nbsp;&nbsp; 赵康杰私人网盘</div>
+                <!-- 头部区域（可配合layui已有的水平导航） -->
+                <ul class="layui-nav layui-layout-left daohanglan-font">
+                    <li class="layui-nav-item"><a href="" style="color:white;font-size:16px">我的网盘</a></li>
+
+                </ul>
+                <ul class="layui-nav layui-layout-right">
+                    <li class="layui-nav-item">
+                        <a href="javascript:;">
+                            @ViewBag.User
+                        </a>
+                        <dl class="layui-nav-child">
+                            <dd><a href="javascript:;" onclick="toUpdatePwd()">修改密码</a></dd>
+
+                        </dl>
+                    </li>
+                    <li class="layui-nav-item"><a href="javascript:;" onclick="LoginOut()">退出登录</a></li>
+                </ul>
+            </div>
+
+            <div class="layui-side">
+                <div class="layui-side-scroll">
+                    <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+                    <ul class="layui-nav layui-nav-tree" lay-filter="test" style="background-color:transparent;text-align:center;padding-top:12px">
+                        <li class="layui-nav-item xuanxiang"><a href="/Home/Index">全部文件</a></li>
+                        <li class="layui-nav-item xuanxiang"><a href="/Home/Classification?Keyword=图片">图片</a></li>
+                        <li class="layui-nav-item xuanxiang"><a href="/Home/Classification?Keyword=文档">文档</a></li>
+                        <li class="layui-nav-item xuanxiang"><a href="/Home/Classification?Keyword=视频">视频</a></li>
+                        <li class="layui-nav-item xuanxiang"><a href="/Home/Classification?Keyword=音乐">音乐</a></li>
+                        <li class="layui-nav-item xuanxiang"><a href="/Home/Classification?Keyword=其他">其他</a></li>
+                        <li class="layui-nav-item xuanxiang"><a href="/Home/recycle">回收站</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="body-div">
+                <!-- 内容主体区域 -->
+                <div>
+                    <div class="operation">
+                        <div style="float:right">
+
+                        </div>
+                        <form method="post" class="" id="data_form" enctype="multipart/form-data" action="" name="form">
+                            <div style="padding: 20px;">
+
+                                <label for="lala" id="shangchuan" style="font-size:12px;padding:10px 30px;background-color:#3b8cff;color:white;border:none;border-radius:5px" name="file[]"><i class="layui-icon layui-icon-upload-drag"></i>上传</label>
+                                <label class="update" style="font-size:12px;padding:10px 30px;border:1px solid #3b8cff;background-color:white;color:#3b8cff;border-radius:5px;" name="file[]"><a href="javascript:;" onclick="UpdateFile()" style="color:#3b8cff"><i class="layui-icon layui-icon-delete"></i>还原文件</a></label>
+                                <label class="delete" style="font-size:12px;padding:10px 30px;border:1px solid #3b8cff;background-color:white;color:#3b8cff;border-radius:5px;" name="file[]"><a href="javascript:;" onclick="DeleteFile()" style="color:#3b8cff"><i class="layui-icon layui-icon-delete"></i>彻底删除</a></label>
+                                <input id="lala" class="qwer" title="点击选择文件" type="file" name="files[]" style="display: none;" />
+                            </div>
+                            <input type="hidden" name="fenlei" value="@ViewBag.Leibie" />
+
+
+
+                            <div style="padding-top:15px;">
+
+                                <div style="padding-left:20px;padding-bottom:10px;" class="shangyiji"><a href="/Home/Index" onclick="remvoeFIdSession()" style="color:blue">全部文件</a> &nbsp;|&nbsp;</div>
+                                <div style="display:flex;border-bottom:1px solid #cbe6f5">
+                                    <div class="paixu" style="width:55%;min-height:25px;padding-top:10px;padding-left:20px">
+                                        <input type="checkbox" name="" title="" lay-skin="primary" onclick=selectall()>&nbsp;&nbsp; 文件名
+                                    </div>
+                                    <div class="paixu" style="width:15%;min-height:25px;padding-top:10px;padding-left:80px">大小</div>
+                                    <div class="paixu" style="width:30%;min-height:25px;padding-top:10px;padding-left:10px">删除日期</div>
+                                </div>
+                            </div>
+
+                            <div class="wenjianqu" style="overflow:auto; height:420px">
+
+                                <div class="tbodys">
+                                    <div id="layer-photos-demo" class="layer-photos-demo">
+                                        @foreach (var item in Model)
+                                        {
+                                            <div style="display:flex;border-bottom:1px solid #cbe6f5" class="paixu">
+                                                <div class="" style="width:55%;min-height:45px;padding-top:10px;padding-left:20px">
+                                                    <input type="checkbox" name="a1" class="a1" title="" value="@item.Store_data_ID">
+                                                    <a href="javascript:void" onclick="">
+                                                        @if (@item.SuffixName == ".png" || @item.SuffixName == ".PNG")
+                                                        {
+                                                            <img class="yulantu" layer-src="@item.DataRoute.Substring(@item.DataRoute.IndexOf("Upload"))" src="@item.icon" alt="@item.Real_FileName">
+                                                        }
+                                                        else
+                                                        {
+                                                            <img src="@item.icon" />
+                                                        }
+                                                        @item.Real_FileName
+
+                                                    </a>
+
+
+                                                </div>
+                                                <div class="" style="width:5%;min-height:45px;padding-top:10px;padding-left:20px"><a class="xiazai" href="/Home/Download?id=@item.Store_data_ID" style="display:none">下载</a></div>
+                                                <div class="" style="width:15%;min-height:45px;padding-top:10px;padding-left:10px">@item.File_Size</div>
+                                                <div class="" style="width:30%;min-height:45px;padding-top:10px;padding-left:10px">@item.DeleteTime</div>
+                                            </div>
+                                        }
+                                    </div>
+
+
+
+
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+    <script>
+        $(function () {
+            sessionStorage.removeItem("FID");
+            var aa = $(".qwer");
+            // ①为input设定change事件
+
+
+
+            aa.change(function () {
+                if ($(this).val() != "") {
+                    var file = $(this).val();
+                    var fileName = file.split("\\").pop();
+                    //触发表单的提交事件
+                    $("#data_form").submit();
+                    var index = layer.load(2, { time: 10 * 1000, offset: ['20px', '570px'] });
+                    layer.msg('正在上传:' + fileName, { offset: ['5px', '630px'], time: 10 * 1000 });
+
+                }
+            });
+
+
+            $(".xuanxiang").click(function () {
+
+                $(this).css("background-color", "#333");
+            });
+
+            var Height = $(window).height();
+            $(".body-div").css("min-height", Height * 0.9);
+            ////alert(Height);
+            //$("#background-div").css("min-height", Height);
+            $(window).resize(function () {
+                var Height = $(window).height();
+                var Width = $(window).width();
+                //alert(Height+"+"+Width);
+                $("#background-div").css("min-height", Height);
+                //$("#background-div").css("max-height", Width);
+                $(".body-div").css("min-height", Height * 0.9);
+            })
+            //background-color:#CBEDFF;
+            $(".paixu").hover(function () {
+                $(this).css("background-color", "#CBEDFF");
+                $(".xiazai", this).css("display", "block");
+
+            }, function () {
+                $(this).css("background-color", "white");
+                $(".xiazai", this).css("display", "none");
+            });
+
+            $("#shangchuan").hover(function () {
+                $(".s-shangchuan").css("display", "block");
+
+            }, function () {
+                //$(".s-shangchuan").css("display", "none");
+            });
+
+            $(".s-shangchuan").hover(function () {
+                //$(".s-shangchuan").css("display", "block");
+
+            }, function () {
+                $(".s-shangchuan").css("display", "none");
+            });
+
+            $(".s-shangchuan-s1").hover(function () {
+                $(".s-shangchuan-s1").css("background-color", "#808080");
+
+            }, function () {
+                $(".s-shangchuan-s1").css("background-color", "white");
+            });
+
+            $(".s-shangchuan-s2").hover(function () {
+                $(".s-shangchuan-s2").css("background-color", "#808080");
+
+            }, function () {
+                $(".s-shangchuan-s2").css("background-color", "white");
+            });
+
+        })
+
+        function remvoeFIdSession() {
+            sessionStorage.removeItem("FID");
+        };
+
+
+        function selectall() {
+            //alert("dwadwd");
+            var obj = document.all.a1
+            for (i = 0; i < obj.length; i++)
+                obj[i].checked = (event.srcElement.checked) ? true : false
+            //obj[i].checked = (event.srcElement.checked) ? $(".delete").show() : $(".delete").hide()
+
+        }
+
+
+
+
+        function toUpdatePwd() {
+            window.open("/Home/UpdatePwd");
+        }
+
+        function LoginOut() {
+            if (confirm("确认退出当前账号吗？")) {
+                window.location.href = "/Home/SignOut";
+            }
+        };
+    </script>
+
+
+    <script src="~/layer/layer.js"></script>
+    <script>
+
+        function yulan(input) {
+            //alert(input);
+            if (input == ".png" || input == ".PNG") {
+                //alert("进来了");
+                $(".yulantu").trigger('click');
+            }
+        }
+
+
+        function addFolderNo() {
+            $(".addwjj").remove();
+        }
+
+        function DeleteFile() {
+
+            obj = document.getElementsByName("a1");
+            check_val = [];
+            for (k in obj) {
+                if (obj[k].checked)
+                    check_val.push(obj[k].value);
+            }
+            //alert(check_val);
+            if (check_val != null && check_val != "") {
+                if (confirm("文件删除后将无法恢复，您确认要彻底删除所选文件吗？")) {
+                    layer.msg('正在删除文件,请稍后...', { offset: '10px', time: 1000 }, function () {
+
+                        $.ajax({
+                            url: "/Home/DeleteFile",
+                            data: JSON.stringify({ "FileID": check_val }),
+                            type: "post",
+                            contentType: "application/json",
+                            success: function (data) {
+                                if (data > 0) {
+                                    layer.msg('✓ 删除成功', { offset: '10px', time: 1000 }, function () {
+                                        window.location.reload();
+                                    });
+                                }
+                                else {
+                                    layer.msg('删除失败', { offset: '10px', time: 1000 }, function () {
+                                        window.location.reload();
+                                    });
+                                }
+
+
+
+                            }, error: function (result) {
+                                alert("Error" + result.responseText);
+                            }
+
+                        });
+                    });
+                }
+
+            }
+            else {
+                alert("请选择要删除的文件");
+            }
+        }
+
+        function UpdateFile() {
+
+            obj = document.getElementsByName("a1");
+            check_val = [];
+            for (k in obj) {
+                if (obj[k].checked)
+                    check_val.push(obj[k].value);
+            }
+            //alert(check_val);
+            if (check_val != null && check_val != "") {
+                
+                    layer.msg('正在还原文件,请稍后...', { offset: '10px', time: 1000 }, function () {
+
+                        $.ajax({
+                            url: "/Home/UpdateFile2",
+                            data: JSON.stringify({ "FileID": check_val }),
+                            type: "post",
+                            contentType: "application/json",
+                            success: function (data) {
+                                if (data > 0) {
+                                    layer.msg('✓ 还原成功', { offset: '10px', time: 1000 }, function () {
+                                        window.location.reload();
+                                    });
+                                }
+                                else {
+                                    layer.msg('还原失败', { offset: '10px', time: 1000 }, function () {
+                                        window.location.reload();
+                                    });
+                                }
+
+
+
+                            }, error: function (result) {
+                                alert("Error" + result.responseText);
+                            }
+
+                        });
+                    });
+                
+
+            }
+            else {
+                alert("请选择要还原的文件");
+            }
+        }
+    </script>
+
+    <script src="~/layui/layui.js"></script>
+    <script>
+        //JavaScript代码区域
+        layui.use('element', function () {
+            var element = layui.element;
+
+        });
+
+    </script>
+
+
+
+</body>
+</html>

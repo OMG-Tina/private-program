@@ -35,7 +35,7 @@ namespace Services
             using (var db = new Model.ZKJSkyDriveEntities())
             {
                 return db.Set<Model.Folder>()
-                    .Where(x => x.FounderID == UserId && x.FatherFolderID == 0)
+                    .Where(x => x.FounderID == UserId && x.FatherFolderID == 0 && x.DeleteState == 0)
                     .OrderByDescending(x => x.EstablishTime)
                     .ToList();
             }
@@ -51,7 +51,7 @@ namespace Services
             using (var db = new Model.ZKJSkyDriveEntities())
             {
                 return db.Set<Model.Store_data>()
-                    .Where(x => x.User_ID == UserID && x.Folder_ID == 0)
+                    .Where(x => x.User_ID == UserID && x.Folder_ID == 0 && x.DeleteState == 0)
                     .OrderByDescending(x => x.EstablishTime)
                     .ToList();
             }
@@ -175,7 +175,7 @@ namespace Services
         {
             using (var db = new Model.ZKJSkyDriveEntities())
             {
-                return db.Set<Model.Folder>().FirstOrDefault(x => x.Folder_ID == FolderID && x.FounderID == UserId);
+                return db.Set<Model.Folder>().FirstOrDefault(x => x.Folder_ID == FolderID && x.FounderID == UserId && x.DeleteState == 0);
             }
         }
 
@@ -189,7 +189,7 @@ namespace Services
             var db = new Model.ZKJSkyDriveEntities();
 
             return db.Set<Model.Folder>()
-                .Where(x => x.FatherFolderID == FolderID)
+                .Where(x => x.FatherFolderID == FolderID && x.DeleteState == 0)
                 .OrderByDescending(x => x.EstablishTime)
                 .ToList();
         }
@@ -213,7 +213,7 @@ namespace Services
             using (var db = new Model.ZKJSkyDriveEntities())
             {
                 return db.Set<Model.Store_data>()
-                    .Where(x => x.Folder_ID == FolderID)
+                    .Where(x => x.Folder_ID == FolderID && x.DeleteState == 0)
                     .OrderByDescending(x => x.EstablishTime)
                     .ToList();
             }
@@ -256,6 +256,94 @@ namespace Services
             return FileSize;
         }
 
+
+        /// <summary>
+        /// 根据后缀查询文件
+        /// </summary>
+        /// <param name="Uid"></param>
+        /// <param name="SuffixName"></param>
+        /// <returns></returns>
+        public List<Model.Store_data> GetStore_dataBySuffixName(int Uid,string SuffixName)
+        { 
+            using(var db = new  Model.ZKJSkyDriveEntities()){
+                return db.Set<Model.Store_data>().Where(x => x.SuffixName == SuffixName && x.User_ID == Uid && x.DeleteState == 0).ToList();
+            }
+        }
+
+        /// <summary>
+        /// 回收站文件
+        /// </summary>
+        /// <param name="Uid"></param>
+        /// <param name="SuffixName"></param>
+        /// <returns></returns>
+        public List<Model.Store_data> recovery(int Uid)
+        {
+            using (var db = new Model.ZKJSkyDriveEntities())
+            {
+                return db.Set<Model.Store_data>().Where(x => x.DeleteState == 1 && x.User_ID == Uid).ToList();
+            }
+        }
+
+        /// <summary>
+        /// 查询其他文件
+        /// </summary>
+        /// <param name="Uid"></param>
+        /// <param name="SuffixName"></param>
+        /// <returns></returns>
+        public List<Model.Store_data> GetStore_dataBySuffixName(int Uid)
+        {
+            using (var db = new Model.ZKJSkyDriveEntities())
+            {
+                return db.Set<Model.Store_data>().Where(x => x.SuffixName != ".txt" && x.SuffixName != ".mp3" && x.SuffixName != ".mp4" && x.SuffixName != ".png" && x.User_ID == Uid).ToList();
+            }
+        }
+
+
+        /// <summary>
+        /// 修改文件状态为回收站
+        /// </summary>
+        /// <param name="FileID"></param>
+        /// <returns></returns>
+        public int UpdateFile(int FileID) {
+            using (var db = new Model.ZKJSkyDriveEntities()) {
+                Model.Store_data store = db.Set<Model.Store_data>().Find(FileID);
+                store.DeleteState = 1;
+                store.DeleteTime = DateTime.Now;
+                db.Entry<Model.Store_data>(store).State = System.Data.Entity.EntityState.Modified;
+                return db.SaveChanges();
+            }
+        }
+
+        /// <summary>
+        /// 还原文件
+        /// </summary>
+        /// <param name="FileID"></param>
+        /// <returns></returns>
+        public int UpdateFile2(int FileID)
+        {
+            using (var db = new Model.ZKJSkyDriveEntities())
+            {
+                Model.Store_data store = db.Set<Model.Store_data>().Find(FileID);
+                store.DeleteState = 0;
+                store.EstablishTime = DateTime.Now;
+                db.Entry<Model.Store_data>(store).State = System.Data.Entity.EntityState.Modified;
+                return db.SaveChanges();
+            }
+        }
+
+        /// <summary>
+        /// 彻底删除
+        /// </summary>
+        /// <param name="FileID"></param>
+        /// <returns></returns>
+        public int DeleteFile(int FileID)
+        {
+            using (var db = new Model.ZKJSkyDriveEntities()) {
+                Model.Store_data store = db.Set<Model.Store_data>().Find(FileID);
+                db.Entry<Model.Store_data>(store).State = System.Data.Entity.EntityState.Deleted;
+                return db.SaveChanges();
+            }
+        }
 
     }
 }

@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>百度网盘-全部文件</title>
+    <title>私人网盘-全部文件</title>
     <link href="~/layui/css/layui.css" rel="stylesheet" />
     <link href="~/Content/Home.css" rel="stylesheet" />
     <script src="~/Scripts/jquery-1.10.2.js"></script>
@@ -81,23 +81,22 @@
                             <div style="padding: 20px;">
 
                                 <label for="lala" id="shangchuan" style="font-size:12px;padding:10px 30px;background-color:#3b8cff;color:white;border:none;border-radius:5px" name="file[]"><i class="layui-icon layui-icon-upload-drag"></i>上传</label>
-                                <input id="lala" class="qwer" title="点击选择文件" type="file" name="files[]" style="display: none;" />
 
-                                @*<label for="lala" style="font-size:12px;padding:10px 30px;border:1px solid #3b8cff;background-color:white;color:#3b8cff;border-radius:5px" name="file[]"><a href="javascript:;" onclick="addFolder()" style="color:#3b8cff"><i class="layui-icon layui-icon-add-circle"></i>新建文件夹</a></label>*@
                                 <label class="delete" style="font-size:12px;padding:10px 30px;border:1px solid #3b8cff;background-color:white;color:#3b8cff;border-radius:5px;" name="file[]"><a href="javascript:;" onclick="DeleteFile()" style="color:#3b8cff"><i class="layui-icon layui-icon-delete"></i>删除</a></label>
+                                <input id="lala" class="qwer" title="点击选择文件" type="file" name="files[]" style="display: none;" />
                             </div>
-
+                            <input type="hidden" name="fenlei" value="@ViewBag.Leibie"/>
 
 
 
                             <div style="padding-top:15px;">
 
-                                <div style="padding-left:20px;padding-bottom:10px;" class="shangyiji"><a href="/Home/Index" style="color:blue">全部文件</a> &nbsp;|&nbsp;</div>
+                                <div style="padding-left:20px;padding-bottom:10px;" class="shangyiji"><a href="/Home/Index" onclick="remvoeFIdSession()" style="color:blue">全部文件</a> &nbsp;|&nbsp;</div>
                                 <div style="display:flex;border-bottom:1px solid #cbe6f5">
                                     <div class="paixu" style="width:55%;min-height:25px;padding-top:10px;padding-left:20px">
                                         <input type="checkbox" name="" title="" lay-skin="primary" onclick=selectall()>&nbsp;&nbsp; 文件名
                                     </div>
-                                    <div class="paixu" style="width:15%;min-height:25px;padding-top:10px;padding-left:10px">大小</div>
+                                    <div class="paixu" style="width:15%;min-height:25px;padding-top:10px;padding-left:80px">大小</div>
                                     <div class="paixu" style="width:30%;min-height:25px;padding-top:10px;padding-left:10px">修改日期</div>
                                 </div>
                             </div>
@@ -105,22 +104,6 @@
                             <div class="wenjianqu" style="overflow:auto; height:420px">
 
                                 <div class="tbodys">
-
-                                    @foreach (var item in ViewBag.Folder)
-                                    {
-                                        <div style="display:flex;border-bottom:1px solid #cbe6f5" class="paixu">
-                                            <div class="" style="width:55%;min-height:45px;padding-top:10px;padding-left:20px">
-                                                <input type="checkbox" name="a1" title="">
-                                                <a href="/Home/OpenForder?ID=@item.Folder_ID" onclick="OpenFolder('@item.Folder_ID')">
-                                                    <img src="~/Icon/Folder.png" />
-                                                    @item.Folder_Name
-                                                </a>
-                                            </div>
-                                            <div class="" style="width:15%;min-height:45px;padding-top:10px;padding-left:10px">-</div>
-                                            <div class="" style="width:30%;min-height:45px;padding-top:10px;padding-left:10px">@item.EstablishTime</div>
-                                        </div>
-                                    }
-
                                     <div id="layer-photos-demo" class="layer-photos-demo">
                                         @foreach (var item in Model)
                                         {
@@ -148,19 +131,10 @@
                                             </div>
                                         }
                                     </div>
-
                                 </div>
 
-                                <div class="s-shangchuan" style="width:95px;height:70px;border:1px solid #3b8cff;border-radius:4px;position:absolute;left:224px;top:104px;display:none;">
-                                    <div class="s-shangchuan-s1" style="height:25px;width:100%;text-align:center;padding-top:10px;background-color:white;">
-                                        <label for="lala" id="shangchuan" style="font-size:12px;color:#3b8cff;border:none;" name="file[]">上传文件</label>
-                                        <input id="lala" class="qwer" title="点击选择文件" type="file" name="files[]" style="display: none;" />
-                                    </div>
-                                    <div class="s-shangchuan-s2" style="height:25px;width:100%;text-align:center;background-color:white;padding-top:10px">
-                                        <label for="hhh" id="shangchuan" style="font-size:12px;color:#3b8cff;border:none;" name="file[]">上传文件夹</label>
-                                        <input id="hhh" class="qwer" title="点击选择文件" type="file" name="files[]" style="display: none;" multiple="multiple" webkitdirectory mozdirectory />
-                                    </div>
-                                </div>
+
+                                
                             </div>
                         </form>
                     </div>
@@ -263,21 +237,6 @@
 
     }
 
-    function OpenFolder(input) {
-        aler(input);
-        var url = window.location.href;
-        var data = sessionStorage.getItem("FID");
-        alert(data);
-        if (data != null) {
-            sessionStorage.removeItem("FID");
-            sessionStorage.setItem("FID", input);
-        } else {
-            sessionStorage.setItem("FID", input);
-        }
-       
-    }
-
-
 
 
 
@@ -304,114 +263,55 @@
             }
         }
 
-        function addFolder() {
-            $(".addwjj").remove();
-            $(".tbodys").prepend("<div style='overflow:auto;display:flex;border-bottom:1px solid #cbe6f5' class='paixu addwjj'> \
-                                                <div class='' style='width:55%;min-height:45px;padding-top:10px;padding-left:20px'>\
-                                                <input type='checkbox' name='a1'>\
-                                                <img src='/Icon/Folder.png'/><input class='Beautify-input' value='新建文件夹'/>&nbsp;\
-                                                <a href='javascript:;' onclick='addFolderOk()'><i class='layui-icon layui-icon-ok'></i></a> &nbsp;\
-                                                <a href='javascript:;' onclick='addFolderNo()'><i class='layui-icon layui-icon-close'></i></a>\
-                                                </div>\
-                                                <div class='' style='width:15%;min-height:45px;padding-top:10px;padding-left:10px'>-</div>\
-                                                <div class='' style='width:30%;min-height:45px;padding-top:10px;padding-left:10px'>-</div>\
-                                            ");
-            $(".Beautify-input").select();
-            $(".Beautify-input").style.backgroundColor = '#0000FF';
-
-
-        }
-
+      
         function addFolderNo() {
             $(".addwjj").remove();
         }
 
         function DeleteFile() {
-            obj = document.getElementsByName("a1");
-            check_val = [];
-            for (k in obj) {
-                if (obj[k].checked)
-                    check_val.push(obj[k].value);
-            }
-            //alert(check_val);
-            if (check_val != null && check_val != "") {
-                if (confirm("确认要把所选文件放入回收站吗？")) {
-                    layer.msg('正在删除文件,请稍后...', { offset: '10px', time: 1000 }, function () {
-
-                        $.ajax({
-                            url: "/Home/UpdateFile",
-                            data: JSON.stringify({ "FileID": check_val }),
-                            type: "post",
-                            contentType: "application/json",
-                            success: function (data) {
-                                if (data > 0) {
-                                    layer.msg('✓ 删除成功', { offset: '10px', time: 1000 }, function () {
-                                        window.location.reload();
-                                    });
-                                }
-                                else {
-                                    layer.msg('删除失败', { offset: '10px', time: 1000 }, function () {
-                                        window.location.reload();
-                                    });
-                                }
-
-
-
-                            }, error: function (result) {
-                                alert("Error" + result.responseText);
-                            }
-
-                        });
-                    });
+            
+                obj = document.getElementsByName("a1");
+                check_val = [];
+                for (k in obj) {
+                    if (obj[k].checked)
+                        check_val.push(obj[k].value);
                 }
+            //alert(check_val);
+                if (check_val != null && check_val!="") {
+                    if (confirm("确认要把所选文件放入回收站吗？")) {
+                        layer.msg('正在删除文件,请稍后...', { offset: '10px', time: 1000 }, function () {
 
-            }
-            else {
-                alert("请选择要删除的文件");
-            }
-        }
+                            $.ajax({
+                                url: "/Home/UpdateFile",
+                                data: JSON.stringify({ "FileID": check_val }),
+                                type: "post",
+                                contentType: "application/json",
+                                success: function (data) {
+                                    if (data > 0) {
+                                        layer.msg('✓ 删除成功', { offset: '10px', time: 1000 }, function () {
+                                            window.location.reload();
+                                        });
+                                    }
+                                    else {
+                                        layer.msg('删除失败', { offset: '10px', time: 1000 }, function () {
+                                            window.location.reload();
+                                        });
+                                    }
 
-        function addFolderOk() {
-            var Folder = $(".Beautify-input").val();
-            var Fid = sessionStorage.getItem("FID");
-            //alert(Folder);
-            alert(Fid);
-            layer.msg('正在创建文件夹,请稍后...', { offset: '10px', time: 1000 }, function () {
 
-                $.ajax({
-                    url: "/Home/AddFolder",
-                    data: JSON.stringify({ "FolderName": Folder, "FatherFolderID": Fid }),
-                    type: "post",
-                    contentType: "application/json",
-                    success: function (data) {
-                        if (data > 0) {
-                            layer.msg('✓ 新建文件夹成功', { offset: '10px', time: 1000 }, function () {
-                                $(".addwjj").remove();
-                                $(".tbodys").prepend("<div style='display:flex;border-bottom:1px solid #cbe6f5' class='paixu'> \
-                                                <div class='' style='width:55%;min-height:45px;padding-top:10px;padding-left:20px'>\
-                                                <input type='checkbox' name='a1'>\
-                                                <img src='/Icon/Folder.png'/> " + Folder + "\
-                                                </div>\
-                                                <div class='' style='width:15%;min-height:45px;padding-top:10px;padding-left:10px'>-</div>\
-                                                <div class='' style='width:30%;min-height:45px;padding-top:10px;padding-left:10px'>-</div>\
-                                            ");
+
+                                }, error: function (result) {
+                                    alert("Error" + result.responseText);
+                                }
 
                             });
-
-                        }
-                        else {
-                            layer.msg('该文件夹已存在', { offset: '10px', time: 1000 }, function () {
-                                $(".addwjj").remove();
-                            });
-                        }
-
-                        window.location.reload();
-
-                    }, error: function (result) {
-                        alert("Error" + result.responseText);
+                        });
                     }
-                });
-            });
+                    
+                }
+                else {
+                    alert("请选择要删除的文件");
+                }
         }
     </script>
 
@@ -424,5 +324,8 @@
         });
 
     </script>
+
+
+   
 </body>
 </html>
