@@ -360,7 +360,26 @@ namespace WebApplication.Controllers
             if ("文档".Equals(Keyword))
             {
                 ViewBag.Leibie = "文档";
-                return View(Home.GetStore_dataBySuffixName(uid,".txt"));
+                List<Model.Store_data> list1 = Home.GetStore_dataBySuffixName(uid, ".txt");
+                List<Model.Store_data> list2 = Home.GetStore_dataBySuffixName(uid, ".docx");
+                foreach (var item in list2)
+                {
+                    Model.Store_data data = new Model.Store_data 
+                    {
+                        Store_data_ID = item.Store_data_ID,
+                        User_ID = item.User_ID,
+                        DataRoute =  item.DataRoute,
+                        Real_FileName =  item.Real_FileName,
+                        File_Size =  item.File_Size,
+                        Folder_ID =  item.Folder_ID,
+                        EstablishTime =  item.EstablishTime,
+                        DeleteState = item.DeleteState,
+                        SuffixName =  item.SuffixName,
+                        icon = item.icon
+                    };
+                    list1.Add(data);
+                }
+                return View(list1);
             }
             else if ("图片".Equals(Keyword))
             {
@@ -644,6 +663,14 @@ namespace WebApplication.Controllers
 
             return Json(jg.ToString(), JsonRequestBehavior.AllowGet);
             
+        }
+
+        public ActionResult QueryTXT(string FileID)
+        {
+            Model.Store_data data = Home.GetfileByid(Convert.ToInt32(FileID));
+            StreamReader str = new StreamReader(data.DataRoute, System.Text.Encoding.Default);
+            string input = str.ReadToEnd();
+            return Json(input, JsonRequestBehavior.AllowGet);
         }
     }
 }

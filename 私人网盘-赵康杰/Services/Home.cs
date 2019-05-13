@@ -345,5 +345,11 @@ namespace Services
             }
         }
 
+
+        public Model.Store_data GetfileByid(int id) {
+            using (var db = new Model.ZKJSkyDriveEntities()) {
+                return db.Set<Model.Store_data>().Find(id);
+            }
+        }
     }
 }

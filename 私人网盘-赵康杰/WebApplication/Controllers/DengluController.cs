@@ -45,8 +45,14 @@ namespace WebApplication.Controllers
             int jg = denglu.InsertUser(User);
             if(jg>0){
 
-                Session["User"] = User;
+               
                 Model.User newUser = denglu.Login(User);
+                Session["User"] = newUser;
+                HttpCookie cookie = new HttpCookie("MyCook");
+                cookie.Values.Add("UserID", newUser.User_ID.ToString());
+                cookie.Values.Add("UserName", newUser.User_Name);
+                cookie.Values.Add("UserPwd", newUser.User_Password);
+                Response.Cookies.Add(cookie);
                 string target = Server.MapPath("~/Upload/");
                 Directory.CreateDirectory(target + newUser.User_ID);
                 return RedirectToAction("Index","Home");

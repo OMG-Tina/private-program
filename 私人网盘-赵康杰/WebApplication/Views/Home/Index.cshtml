@@ -8,10 +8,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>私人网盘-全部文件</title>
+
     
-    <link href="~/layui/css/layui.css" rel="stylesheet" />
     <link href="~/Content/Home.css" rel="stylesheet" />
+    <link href="~/layui/css/layui.css" rel="stylesheet" />
     <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
     <style>
         .Beautify-input {
             height: 10px;
@@ -33,6 +35,9 @@
     </style>
 </head>
 <body>
+
+    
+
     <div id="background-div" class="f-div">
         <div class="layui-layout layui-layout-admin">
             <div class="layui-header" style="background-color:transparent;">
@@ -60,7 +65,7 @@
                 <div class="layui-side-scroll">
                     <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
                     <ul class="layui-nav layui-nav-tree" lay-filter="test" style="background-color:transparent;text-align:center;padding-top:12px">
-                        <li class="layui-nav-item xuanxiang"><a href="/Home/Index">全部文件</a></li>
+                        <li class="layui-nav-item xuanxiang"><a href="/">全部文件</a></li>
                         <li class="layui-nav-item xuanxiang"><a href="/Home/Classification?Keyword=图片">图片</a></li>
                         <li class="layui-nav-item xuanxiang"><a href="/Home/Classification?Keyword=文档">文档</a></li>
                         <li class="layui-nav-item xuanxiang"><a href="/Home/Classification?Keyword=视频">视频</a></li>
@@ -126,18 +131,45 @@
                                             @foreach (var item in Model)
                                             {
                                                 <div style="display:flex;border-bottom:1px solid #cbe6f5" class="paixu">
-                                                    <div class="" style="width:55%;min-height:45px;padding-top:10px;padding-left:20px">
-                                                        <input type="checkbox" name="a1" class="a1" title="" value="@item.Store_data_ID">
+                                                    <div class="" style="width:55%;min-height:45px;padding-top:10px;padding-left:20px;vertical-align:middle">
+                                                        <input type="checkbox" name="a1" class="a1" title="" value="@item.Store_data_ID" style="vertical-align:middle">
                                                         <a href="javascript:void" onclick="">
                                                             @if (@item.SuffixName == ".png" || @item.SuffixName == ".PNG")
                                                             {
                                                                 <img  class="yulantu" layer-src="@item.DataRoute.Substring(@item.DataRoute.IndexOf("Upload"))" src="@item.icon" alt="@item.Real_FileName">
+                                                                 @item.Real_FileName
                                                             }
-                                                            else
+                                                            else if (@item.SuffixName == ".mp4" || @item.SuffixName == ".MP4")
                                                             {
-                                                                <img src="@item.icon" />
+                                                                <div style="vertical-align:middle;display:inline-block;width:30px;height:32px;background-image:url(@item.icon)" class="video" >
+                                                                    <input type="hidden" class="videosrc" value="@item.DataRoute.Substring(@item.DataRoute.IndexOf("Upload"))" />
+
+                                                                </div>
+                                                                @*<div style="display:none" class="videosrc">@item.DataRoute.Substring(@item.DataRoute.IndexOf("Upload"))</div>*@
+                                                                @*<img src="" />*@
+                                                                 @item.Real_FileName
                                                             }
-                                                            @item.Real_FileName
+                                                            
+                                                            else if (@item.SuffixName == ".txt" || @item.SuffixName == ".TXT")
+                                                            {
+                                                                <div style="vertical-align:middle;display:inline-block;width:30px;height:32px;background-image:url(@item.icon)" class="txt" >
+                                                                    <input type="hidden" class="txtsrc" value="@item.Store_data_ID" />
+
+                                                                </div>
+                                                                @*<div style="display:none" class="videosrc">@item.DataRoute.Substring(@item.DataRoute.IndexOf("Upload"))</div>*@
+                                                                @*<img src="" />*@
+                                                                 @item.Real_FileName
+                                                            }
+                                                            
+                                                            else { 
+                                                               <div style="vertical-align:middle;display:inline-block;width:30px;height:32px;background-image:url(@item.icon)" class="music" >
+                                                                    <input type="hidden" class="" value="@item.DataRoute.Substring(@item.DataRoute.IndexOf("Upload"))" />
+
+                                                                </div>
+                                                                @item.Real_FileName
+                                                            }
+                                                            
+                                                           
 
                                                         </a>
                                                        
@@ -148,7 +180,9 @@
                                                     <div class="" style="width:30%;min-height:45px;padding-top:10px;padding-left:10px">@item.EstablishTime</div>
                                                 </div>
                                             }
-                                        </div>
+
+                                            
+                                        </div>   
                                     </div>
                                     <script src="~/layer/layer.js"></script>
                                     <script>
@@ -177,10 +211,11 @@
 
         </div>
     </div>
-    
- 
+   
     <script>
         $(function () {
+
+
                 var aa = $(".qwer");
                 // ①为input设定change事件
                 
@@ -251,10 +286,54 @@
                 }, function () {
                     $(".s-shangchuan-s2").css("background-color", "white");
                 });
+                $(".video").click(function () {
+                    var src = $(this).find(".videosrc").val();
+                    alert(src);
+                    layer.open({
+                        type: 1 //Page层类型
+                      , area: ['700px', '400px']
+                      , title: ''
+                      , shade: 0.6 //遮罩透明度
+                      , maxmin: false //允许全屏最小化
+                      , anim: -1 //0-6的动画形式，-1不开启
+                      , content: '<video src="' + src + '"  width="700" height="400" controls="controls"></video>'
+
+                    });
+                })
+
+
+                $(".txt").click(function () {
+                    var src = $(this).find(".txtsrc").val();
+                    alert(src);
+
+                    $.ajax({
+                        url: "/Home/QueryTXT",
+                        data: JSON.stringify({ "FileID": src }),
+                        type: "post",
+                        contentType: "application/json",
+                        success: function (data) {
+                            layer.open({
+                                type: 1 //Page层类型
+                                , area: ['700px', '400px']
+                                , title: ''
+                                , shade: 0.6 //遮罩透明度
+                                , maxmin: false //允许全屏最小化
+                                , anim: -1 //0-6的动画形式，-1不开启
+                                , content: '<div>' + data + '</div>'
+
+                            });
+
+                        }, error: function (result) {
+                            alert("Error" + result.responseText);
+                        }
+
+                    });
+
+                    
+                })
 
             })
 
-        
 
         function selectall() {
             //alert("dwadwd");
@@ -361,13 +440,7 @@
     <script src="~/layer/layer.js"></script>
     <script>
 
-        function yulan(input) {
-            alert(input);
-            if (input == ".png" || input == ".PNG") {
-                alert("进来了");
-                $(".yulantu").trigger('click');
-            }
-        }
+       
 
         function addFolder() {
             $(".addwjj").remove();
