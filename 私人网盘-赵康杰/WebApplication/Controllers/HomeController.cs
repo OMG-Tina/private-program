@@ -116,6 +116,8 @@ namespace WebApplication.Controllers
 
 
                         }
+
+
                         //创建文件夹路径
                         Directory.CreateDirectory(target + lujin);
 
@@ -143,18 +145,38 @@ namespace WebApplication.Controllers
                             Home.DeleteOldFile(oldStore_data.Store_data_ID);
                         }
 
-                        Model.Store_data data = new Model.Store_data
+                        string icons = Server.MapPath("~/Icon/" + icon[icon.Length - 1].ToUpper() + ".png/");
+                        Model.Store_data data = null;
+                        if (icons != null)
                         {
-                            User_ID = Convert.ToInt32(Request.Cookies["MyCook"]["UserID"]),
-                            DataRoute = path,
-                            Real_FileName = wenjian,
-                            File_Size = Home.GetFileSize(files[i].ContentLength),
-                            Folder_ID = Home.GetNewFolderId(Convert.ToInt32(Request.Cookies["MyCook"]["UserID"])),
-                            EstablishTime = DateTime.Now,
-                            DeleteState = 0,
-                            SuffixName = filename.Substring(filename.LastIndexOf(".")),
-                            icon = "/Icon/" + icon[icon.Length - 1].ToUpper() + ".png"
-                        };
+                            data = new Model.Store_data
+                            {
+                                User_ID = Convert.ToInt32(Request.Cookies["MyCook"]["UserID"]),
+                                DataRoute = path,
+                                Real_FileName = wenjian,
+                                File_Size = Home.GetFileSize(files[i].ContentLength),
+                                Folder_ID = Home.GetNewFolderId(Convert.ToInt32(Request.Cookies["MyCook"]["UserID"])),
+                                EstablishTime = DateTime.Now,
+                                DeleteState = 0,
+                                SuffixName = filename.Substring(filename.LastIndexOf(".")),
+                                icon = "/Icon/" + icon[icon.Length - 1].ToUpper() + ".png"
+                            };
+                        }
+                        else
+                        {
+                            data = new Model.Store_data
+                            {
+                                User_ID = Convert.ToInt32(Request.Cookies["MyCook"]["UserID"]),
+                                DataRoute = path,
+                                Real_FileName = wenjian,
+                                File_Size = Home.GetFileSize(files[i].ContentLength),
+                                Folder_ID = Home.GetNewFolderId(Convert.ToInt32(Request.Cookies["MyCook"]["UserID"])),
+                                EstablishTime = DateTime.Now,
+                                DeleteState = 0,
+                                SuffixName = filename.Substring(filename.LastIndexOf(".")),
+                                icon = "/Icon/weizhi.png"
+                            };
+                        }
                         Home.Insert(data);
 
                     }
@@ -182,18 +204,38 @@ namespace WebApplication.Controllers
                             System.IO.File.Delete(oldStore_data.DataRoute);
                             Home.DeleteOldFile(oldStore_data.Store_data_ID);
                         }
-                        Model.Store_data data = new Model.Store_data
+
+                        Model.Store_data data = null;
+                        if(System.IO.File.Exists(Server.MapPath("~/Icon/" + icon[icon.Length - 1].ToUpper() + ".png/")))
                         {
-                            User_ID = Convert.ToInt32(Request.Cookies["MyCook"]["UserID"]),
-                            DataRoute = path,
-                            Real_FileName = filename,
-                            File_Size = Home.GetFileSize(files[i].ContentLength),
-                            Folder_ID = 0,
-                            EstablishTime = DateTime.Now,
-                            DeleteState = 0,
-                            SuffixName = filename.Substring(filename.LastIndexOf(".")),
-                            icon = "/Icon/" + icon[icon.Length - 1].ToUpper() + ".png"
-                        };
+                            data = new Model.Store_data
+                            {
+                                User_ID = Convert.ToInt32(Request.Cookies["MyCook"]["UserID"]),
+                                DataRoute = path,
+                                Real_FileName = filename,
+                                File_Size = Home.GetFileSize(files[i].ContentLength),
+                                Folder_ID = 0,
+                                EstablishTime = DateTime.Now,
+                                DeleteState = 0,
+                                SuffixName = filename.Substring(filename.LastIndexOf(".")),
+                                icon = "/Icon/" + icon[icon.Length - 1].ToUpper() + ".png"
+                            };
+                        }
+                        else
+                        {
+                            data = new Model.Store_data
+                            {
+                                User_ID = Convert.ToInt32(Request.Cookies["MyCook"]["UserID"]),
+                                DataRoute = path,
+                                Real_FileName = filename,
+                                File_Size = Home.GetFileSize(files[i].ContentLength),
+                                Folder_ID = 0,
+                                EstablishTime = DateTime.Now,
+                                DeleteState = 0,
+                                SuffixName = filename.Substring(filename.LastIndexOf(".")),
+                                icon = "/Icon/weizhi.png"
+                            };
+                        }
 
                         Home.Insert(data);
 
@@ -527,18 +569,39 @@ namespace WebApplication.Controllers
                             Home.DeleteOldFile(oldStore_data.Store_data_ID);
                         }
 
-                        Model.Store_data data = new Model.Store_data
+                        string icons = Server.MapPath("~/Icon/" + icon[icon.Length - 1].ToUpper() + ".png/");
+                        Model.Store_data data = null;
+                        if (icons != null)
                         {
-                            User_ID = Convert.ToInt32(Request.Cookies["MyCook"]["UserID"]),
-                            DataRoute = path,
-                            Real_FileName = wenjian,
-                            File_Size = Home.GetFileSize(files[i].ContentLength),
-                            Folder_ID = Home.GetNewFolderId(Convert.ToInt32(Request.Cookies["MyCook"]["UserID"])),
-                            EstablishTime = DateTime.Now,
-                            DeleteState = 0,
-                            SuffixName = filename.Substring(filename.LastIndexOf(".")),
-                            icon = "/Icon/" + icon[icon.Length - 1].ToUpper() + ".png"
-                        };
+                            data = new Model.Store_data
+                            {
+                                User_ID = Convert.ToInt32(Request.Cookies["MyCook"]["UserID"]),
+                                DataRoute = path,
+                                Real_FileName = wenjian,
+                                File_Size = Home.GetFileSize(files[i].ContentLength),
+                                Folder_ID = Home.GetNewFolderId(Convert.ToInt32(Request.Cookies["MyCook"]["UserID"])),
+                                EstablishTime = DateTime.Now,
+                                DeleteState = 0,
+                                SuffixName = filename.Substring(filename.LastIndexOf(".")),
+                                icon = "/Icon/" + icon[icon.Length - 1].ToUpper() + ".png"
+                            };
+                        }
+                        else {
+                            data = new Model.Store_data
+                            {
+                                User_ID = Convert.ToInt32(Request.Cookies["MyCook"]["UserID"]),
+                                DataRoute = path,
+                                Real_FileName = wenjian,
+                                File_Size = Home.GetFileSize(files[i].ContentLength),
+                                Folder_ID = Home.GetNewFolderId(Convert.ToInt32(Request.Cookies["MyCook"]["UserID"])),
+                                EstablishTime = DateTime.Now,
+                                DeleteState = 0,
+                                SuffixName = filename.Substring(filename.LastIndexOf(".")),
+                                icon = "/Icon/weizhi.png"
+                            };
+                        }
+
+                       
                         Home.Insert(data);
 
                     }
@@ -566,18 +629,40 @@ namespace WebApplication.Controllers
                             System.IO.File.Delete(oldStore_data.DataRoute);
                             Home.DeleteOldFile(oldStore_data.Store_data_ID);
                         }
-                        Model.Store_data data = new Model.Store_data
+
+                        string icons = Server.MapPath("~/Icon/" + icon[icon.Length - 1].ToUpper() + ".png/");
+                        Model.Store_data data = null;
+                        if (icons != null)
                         {
-                            User_ID = Convert.ToInt32(Request.Cookies["MyCook"]["UserID"]),
-                            DataRoute = path,
-                            Real_FileName = filename,
-                            File_Size = Home.GetFileSize(files[i].ContentLength),
-                            Folder_ID = 0,
-                            EstablishTime = DateTime.Now,
-                            DeleteState = 0,
-                            SuffixName = filename.Substring(filename.LastIndexOf(".")),
-                            icon = "/Icon/" + icon[icon.Length - 1].ToUpper() + ".png"
-                        };
+                                data = new Model.Store_data
+                                {
+                                    User_ID = Convert.ToInt32(Request.Cookies["MyCook"]["UserID"]),
+                                    DataRoute = path,
+                                    Real_FileName = filename,
+                                    File_Size = Home.GetFileSize(files[i].ContentLength),
+                                    Folder_ID = 0,
+                                    EstablishTime = DateTime.Now,
+                                    DeleteState = 0,
+                                    SuffixName = filename.Substring(filename.LastIndexOf(".")),
+                                    icon = "/Icon/" + icon[icon.Length - 1].ToUpper() + ".png"
+                                };
+                        }
+                        else
+                        {
+                            data = new Model.Store_data
+                            {
+                                User_ID = Convert.ToInt32(Request.Cookies["MyCook"]["UserID"]),
+                                DataRoute = path,
+                                Real_FileName = filename,
+                                File_Size = Home.GetFileSize(files[i].ContentLength),
+                                Folder_ID = 0,
+                                EstablishTime = DateTime.Now,
+                                DeleteState = 0,
+                                SuffixName = filename.Substring(filename.LastIndexOf(".")),
+                                icon = "/Icon/weizhi.png"
+                            };
+                        }
+                        
 
                         Home.Insert(data);
 

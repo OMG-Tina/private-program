@@ -86,7 +86,7 @@
                         <form method="post" class="" id="data_form" enctype="multipart/form-data" action="" name="form">
                             <div style="padding: 20px;">
 
-                                <label for="lala" id="shangchuan" style="font-size:12px;padding:10px 30px;background-color:#3b8cff;color:white;border:none;border-radius:5px" name="file[]"><i class="layui-icon layui-icon-upload-drag"></i>上传</label>
+                                <label for="lala" id="shangchuan" style="font-size:12px;padding:10px 30px;background-color:#3b8cff;color:white;border:none;border-radius:5px" name="file[]" multiple><i class="layui-icon layui-icon-upload-drag"></i>上传</label>
                                 <input id="lala" class="qwer" title="点击选择文件" type="file" name="files[]" style="display: none;" />
 
                                 @*<label  style="font-size:12px;padding:10px 30px;border:1px solid #3b8cff;background-color:white;color:#3b8cff;border-radius:5px" name="file[]"><a href="javascript:;" onclick="addFolder()" style="color:#3b8cff"><i class="layui-icon layui-icon-add-circle"></i>新建文件夹</a></label>*@
@@ -134,12 +134,12 @@
                                                     <div class="" style="width:55%;min-height:45px;padding-top:10px;padding-left:20px;vertical-align:middle">
                                                         <input type="checkbox" name="a1" class="a1" title="" value="@item.Store_data_ID" style="vertical-align:middle">
                                                         <a href="javascript:void" onclick="">
-                                                            @if (@item.SuffixName == ".png" || @item.SuffixName == ".PNG")
+                                                            @if (@item.SuffixName == ".png" || @item.SuffixName == ".PNG" || @item.SuffixName == ".JPG" || @item.SuffixName == ".jpg" || @item.SuffixName == ".gif" || @item.SuffixName == ".GIF" || @item.SuffixName == ".bmp" || @item.SuffixName == ".BMP" || @item.SuffixName == ".tif" || @item.SuffixName == ".TIF")
                                                             {
                                                                 <img  class="yulantu" layer-src="@item.DataRoute.Substring(@item.DataRoute.IndexOf("Upload"))" src="@item.icon" alt="@item.Real_FileName">
                                                                  @item.Real_FileName
                                                             }
-                                                            else if (@item.SuffixName == ".mp4" || @item.SuffixName == ".MP4")
+                                                            else if (@item.SuffixName == ".mp4" || @item.SuffixName == ".MP4" || @item.SuffixName == ".avi" || @item.SuffixName == ".AVI" || @item.SuffixName == ".rmvb" || @item.SuffixName == ".RMVB" || @item.SuffixName == ".wma" || @item.SuffixName == ".WMA" || @item.SuffixName == ".flv" || @item.SuffixName == ".FLV" || @item.SuffixName == ".mkv" || @item.SuffixName == ".MKV")
                                                             {
                                                                 <div style="vertical-align:middle;display:inline-block;width:30px;height:32px;background-image:url(@item.icon)" class="video" >
                                                                     <input type="hidden" class="videosrc" value="@item.DataRoute.Substring(@item.DataRoute.IndexOf("Upload"))" />
@@ -149,8 +149,8 @@
                                                                 @*<img src="" />*@
                                                                  @item.Real_FileName
                                                             }
-                                                            
-                                                            else if (@item.SuffixName == ".txt" || @item.SuffixName == ".TXT")
+
+                                                            else if (@item.SuffixName == ".txt" || @item.SuffixName == ".TXT" || @item.SuffixName == ".excel" || @item.SuffixName == ".EXCEL" || @item.SuffixName == ".ppt" || @item.SuffixName == ".PPT" || @item.SuffixName == ".xlsx" || @item.SuffixName == ".XLSX")
                                                             {
                                                                 <div style="vertical-align:middle;display:inline-block;width:30px;height:32px;background-image:url(@item.icon)" class="txt" >
                                                                     <input type="hidden" class="txtsrc" value="@item.Store_data_ID" />
@@ -194,7 +194,7 @@
                                     <div class="s-shangchuan" style="width:95px;height:70px;border:1px solid #3b8cff;border-radius:4px;position:absolute;left:224px;top:104px;display:none;">
                                         <div class="s-shangchuan-s1" style="height:25px;width:100%;text-align:center;padding-top:10px;background-color:white;">
                                             <label for="lala" id="shangchuan" style="font-size:12px;color:#3b8cff;border:none;" name="file[]">上传文件</label>
-                                            <input id="lala" class="qwer" title="点击选择文件" type="file" name="files[]" style="display: none;" />
+                                            <input id="lala" class="qwer" title="点击选择文件" multiple type="file" name="files[]" style="display: none;" />
                                         </div>
                                         <div class="s-shangchuan-s2" style="height:25px;width:100%;text-align:center;background-color:white;padding-top:10px">
                                             <label for="hhh" id="shangchuan" style="font-size:12px;color:#3b8cff;border:none;" name="file[]">上传文件夹</label>
