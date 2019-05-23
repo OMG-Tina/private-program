@@ -90,8 +90,6 @@
 
 
                             <div style="padding-top:15px;">
-
-                                <div style="padding-left:20px;padding-bottom:10px;" class="shangyiji"><a href="/Home/Index" onclick="remvoeFIdSession()" style="color:blue">全部文件</a> &nbsp;|&nbsp;</div>
                                 <div style="display:flex;border-bottom:1px solid #cbe6f5">
                                     <div class="paixu" style="width:55%;min-height:25px;padding-top:10px;padding-left:20px">
                                         <input type="checkbox" name="" title="" lay-skin="primary" onclick=selectall()>&nbsp;&nbsp; 文件名
@@ -119,7 +117,7 @@
                                                         else if (@item.SuffixName == ".mp4" || @item.SuffixName == ".MP4")
                                                         {
                                                             <div style="vertical-align:middle;display:inline-block;width:30px;height:32px;background-image:url(@item.icon)" class="video">
-                                                                <input type="hidden" class="videosrc" value="/@item.DataRoute.Substring(@item.DataRoute.IndexOf("Upload"))" />
+                                                                <input type="hidden" class="videosrc" value="\@item.DataRoute.Substring(@item.DataRoute.IndexOf("Upload"))" />
 
                                                             </div>
                                                             @*<div style="display:none" class="videosrc">@item.DataRoute.Substring(@item.DataRoute.IndexOf("Upload"))</div>*@
@@ -127,10 +125,10 @@
                                                             @item.Real_FileName
                                                         }
 
-                                                        else if (@item.SuffixName == ".txt" || @item.SuffixName == ".TXT")
+                                                        else if (@item.SuffixName == ".txt" || @item.SuffixName == ".TXT" || @item.SuffixName == ".doc" || @item.SuffixName == ".docx")
                                                         {
                                                             <div style="vertical-align:middle;display:inline-block;width:30px;height:32px;background-image:url(@item.icon)" class="txt">
-                                                                <input type="hidden" class="txtsrc" value="@item.Store_data_ID" />
+                                                                <input type="hidden" class="txtsrc" value="@item.DataRoute.Substring(@item.DataRoute.IndexOf("Upload"))" />
 
                                                             </div>
                                                             @*<div style="display:none" class="videosrc">@item.DataRoute.Substring(@item.DataRoute.IndexOf("Upload"))</div>*@
@@ -141,7 +139,7 @@
                                                         else
                                                         {
                                                             <div style="vertical-align:middle;display:inline-block;width:30px;height:32px;background-image:url(@item.icon)" class="music">
-                                                                <input type="hidden" class="" value="/@item.DataRoute.Substring(@item.DataRoute.IndexOf("Upload"))" />
+                                                                <input type="hidden" class="" value="\@item.DataRoute.Substring(@item.DataRoute.IndexOf("Upload"))" />
 
                                                             </div>
                                                             @item.Real_FileName
@@ -263,7 +261,7 @@
 
         $(".video").click(function () {
             var src = $(this).find(".videosrc").val();
-            alert(src);
+            //alert(src);
             layer.open({
                 type: 1 //Page层类型
               , area: ['700px', '400px']
@@ -271,7 +269,7 @@
               , shade: 0.6 //遮罩透明度
               , maxmin: false //允许全屏最小化
               , anim: -1 //0-6的动画形式，-1不开启
-              , content: '<video src="/' + src + '"  width="700" height="400" controls="controls"></video>'
+              , content: '<video src="' + src + '"  width="700" height="400" controls="controls"></video>'
 
             });
         })
@@ -279,11 +277,11 @@
 
         $(".txt").click(function () {
             var src = $(this).find(".txtsrc").val();
-            alert(src);
+            //alert(src);
 
             $.ajax({
                 url: "/Home/QueryTXT",
-                data: JSON.stringify({ "FileID": src }),
+                data: JSON.stringify({ "url": "\\" + src }),
                 type: "post",
                 contentType: "application/json",
                 success: function (data) {

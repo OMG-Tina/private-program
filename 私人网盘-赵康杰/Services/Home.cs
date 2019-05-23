@@ -294,7 +294,7 @@ namespace Services
         {
             using (var db = new Model.ZKJSkyDriveEntities())
             {
-                return db.Set<Model.Store_data>().Where(x => x.SuffixName != ".txt" && x.SuffixName != ".mp3" && x.SuffixName != ".mp4" && x.SuffixName != ".png" && x.User_ID == Uid).ToList();
+                return db.Set<Model.Store_data>().Where(x =>x.SuffixName=="weizhi.png" && x.User_ID == Uid).ToList();
             }
         }
 

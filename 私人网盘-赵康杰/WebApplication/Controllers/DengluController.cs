@@ -23,15 +23,15 @@ namespace WebApplication.Controllers
 
             Model.User user = denglu.Login(User);
             if(user!=null){
-                Session["User"] = user;
                 HttpCookie cookie = new HttpCookie("MyCook");
                 cookie.Values.Add("UserID", user.User_ID.ToString());
                 cookie.Values.Add("UserName", user.User_Name);
                 cookie.Values.Add("UserPwd", user.User_Password);
+                cookie.Expires = DateTime.Now.AddDays(365);
                 Response.Cookies.Add(cookie);
                 return RedirectToAction("Index","Home");
             }
-            return View();
+            return Content("<script>alert('账号或密码错误！')</script>");
         }
 
         [HttpGet]
@@ -39,6 +39,7 @@ namespace WebApplication.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public ActionResult zhuce(Model.User User)
         {
@@ -47,11 +48,11 @@ namespace WebApplication.Controllers
 
                
                 Model.User newUser = denglu.Login(User);
-                Session["User"] = newUser;
                 HttpCookie cookie = new HttpCookie("MyCook");
                 cookie.Values.Add("UserID", newUser.User_ID.ToString());
                 cookie.Values.Add("UserName", newUser.User_Name);
                 cookie.Values.Add("UserPwd", newUser.User_Password);
+                cookie.Expires = DateTime.Now.AddDays(365);
                 Response.Cookies.Add(cookie);
                 string target = Server.MapPath("~/Upload/");
                 Directory.CreateDirectory(target + newUser.User_ID);

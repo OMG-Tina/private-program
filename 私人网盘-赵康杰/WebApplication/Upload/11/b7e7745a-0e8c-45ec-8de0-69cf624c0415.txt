@@ -1,0 +1,52 @@
+1.什么是ADO.NET
+	.net
+
+
+
+
+3.ADO.NET数据提供程序核心对象
+	1.Connection：连接对象，访问与DB建立连接
+	  连接字符串的写法：
+	  server=.;datebase=mydb;uid=sa;pwd=sasa;
+	  Date source =.;Initial catelog =mydb;intergrated security=true;
+	  常用方法：
+	  1.Open():打开连接
+	  2.Close():关闭连接
+	
+
+	2.Command：命令(执行)对象，执行SQL语句
+	  常用方法：
+	  1.ExecuteNonQuery():执行增删改，返回受影响函数（int）
+	  2.ExecuteScalar：执行单行单列的查询，返回个Object
+	  3.ExecuteReader():执行查询，返回一个DateReader对象
+	  常用属性：
+	  1.CommandText：指定SQL语句
+	  2.CommandType：命令对象，可以是普通的SQL，存储过程等
+	3.DateReader：数据读取对象
+	  特点：
+	  以只进的方式，一次只读取一行记录
+	  读取记录的代码模板：
+	  While(reader.Read()){
+		int id Convert.ToInt23("id");
+		String title = Convert.ToString(reader{"title"});
+	  }
+
+	4.DateAdapter:数据适配器对象
+	  作用：将数据源转换成DateSet可以存储的格式，不同的数据源使用不同的DateAdapter对象，与DateSet一起使用。
+	  常用方法：
+	  1.Fill()：将数据源的数据填充到DateSet中。
+	  2.Updata()：将DataSet中修改的数据更新到数据源
+	
+4.DateSet：数据集
+	作用是在内存中临时缓存数据，其结构与查询结果一致。
+	构成的相关对象：
+	DataSet==>>DataTable==>>DataRow==>>DataColum
+	DataSet取值代码模板：
+	foreach（DataRow row in dataSet.Table["Book"].Rows）{
+		int id=Convert.ToString(row["title"]);
+	}
+
+
+
+
+

@@ -38,6 +38,17 @@ namespace Services
 
         }
 
-
+        /// <summary>
+        /// 根据用户id查询用户信息
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <returns></returns>
+        public Model.User GetUserByID(int UserID)
+        {
+            using (Model.ZKJSkyDriveEntities db = new Model.ZKJSkyDriveEntities())
+            {
+                return db.Set<Model.User>().Find(UserID);
+            }
+        }
     }
 }

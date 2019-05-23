@@ -50,7 +50,7 @@
                 <ul class="layui-nav layui-layout-right">
                     <li class="layui-nav-item">
                         <a href="javascript:;">
-                            @ViewBag.User
+                            @ViewBag.User.User_Name
                         </a>
                         <dl class="layui-nav-child">
                             <dd><a href="javascript:;" onclick="toUpdatePwd()">修改密码</a></dd>
@@ -98,7 +98,7 @@
 
                             <div style="padding-top:15px;">
 
-                                <div style="padding-left:20px;padding-bottom:10px;" class="shangyiji"><a href="/Home/Index" onclick="remvoeFIdSession()" style="color:blue">全部文件</a> &nbsp;|&nbsp;</div>
+                                <div style="padding-left:20px;padding-bottom:10px;" class="shangyiji">全部文件&nbsp;|&nbsp;</div>
                                 <div style="display:flex;border-bottom:1px solid #cbe6f5">
                                     <div class="paixu" style="width:55%;min-height:25px;padding-top:10px;padding-left:20px">
                                         <input type="checkbox" name="" title="" lay-skin="primary" onclick=selectall()>&nbsp;&nbsp; 文件名
@@ -149,11 +149,21 @@
                                                                 @*<img src="" />*@
                                                                  @item.Real_FileName
                                                             }
+                                                            else if (@item.SuffixName == ".mp3" || @item.SuffixName == ".MP3")
+                                                            {
+                                                                <div style="vertical-align:middle;display:inline-block;width:30px;height:32px;background-image:url(@item.icon)" class="audio">
+                                                                    <input type="hidden" class="audiosrc" value="@item.DataRoute.Substring(@item.DataRoute.IndexOf("Upload"))" />
+
+                                                                </div>
+                                                                @*<div style="display:none" class="videosrc">@item.DataRoute.Substring(@item.DataRoute.IndexOf("Upload"))</div>*@
+                                                                @*<img src="" />*@
+                                                                @item.Real_FileName
+                                                            }
 
                                                             else if (@item.SuffixName == ".txt" || @item.SuffixName == ".TXT" || @item.SuffixName == ".excel" || @item.SuffixName == ".EXCEL" || @item.SuffixName == ".ppt" || @item.SuffixName == ".PPT" || @item.SuffixName == ".xlsx" || @item.SuffixName == ".XLSX" || @item.SuffixName == ".word" || @item.SuffixName == ".WORD" || @item.SuffixName == ".docx" || @item.SuffixName == ".doc")
                                                             {
                                                                 <div style="vertical-align:middle;display:inline-block;width:30px;height:32px;background-image:url(@item.icon)" class="txt" >
-                                                                    <input type="hidden" class="txtsrc" value="@item.Store_data_ID" />
+                                                                    <input type="hidden" class="txtsrc" value="@item.DataRoute.Substring(@item.DataRoute.IndexOf("Upload"))" />
 
                                                                 </div>
                                                                 @*<div style="display:none" class="videosrc">@item.DataRoute.Substring(@item.DataRoute.IndexOf("Upload"))</div>*@
@@ -161,7 +171,7 @@
                                                                  @item.Real_FileName
                                                             }
                                                             
-                                                            else { 
+                                                            else {
                                                                <div style="vertical-align:middle;display:inline-block;width:30px;height:32px;background-image:url(@item.icon)" class="music" >
                                                                     <input type="hidden" class="" value="@item.DataRoute.Substring(@item.DataRoute.IndexOf("Upload"))" />
 
@@ -286,41 +296,73 @@
                 }, function () {
                     $(".s-shangchuan-s2").css("background-color", "white");
                 });
+
+
+                //视频预览
                 $(".video").click(function () {
                     var src = $(this).find(".videosrc").val();
-                    alert(src);
-                    layer.open({
-                        type: 1 //Page层类型
-                      , area: ['700px', '400px']
-                      , title: ''
-                      , shade: 0.6 //遮罩透明度
-                      , maxmin: false //允许全屏最小化
-                      , anim: -1 //0-6的动画形式，-1不开启
-                      , content: '<video src="' + src + '"  width="700" height="400" controls="controls"></video>'
 
+                    layer.msg('正在加载数据', {
+                        offset: ['70px', '620px'],
+                        time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                    }, function () {
+                        layer.open({
+                            type: 1 //Page层类型
+                      , area: ['710px', '410px']
+                      , title: ''
+                      , shade: 0.7 //遮罩透明度
+                      , maxmin: false //允许全屏最小化
+                      , anim: 5 //0-6的动画形式，-1不开启
+                      , content: '<div style="width:100%;height:100%;text-align:center;background-color:#2b2b2b;">\
+                                        <video src="' + src + '"  width="700" height="400" controls="controls"></video>\
+                                        </div>'
+                        });
+                    });
+                })
+
+            //音频预览
+                $(".audio").click(function () {
+                    var src = $(this).find(".audiosrc").val();
+
+                    layer.msg('正在加载数据', {
+                        offset: ['70px', '620px'],
+                        time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                    }, function () {
+                        layer.open({
+                            type: 1 //Page层类型
+                      , title: ''
+                      , shade: 0.7 //遮罩透明度
+                      , maxmin: false //允许全屏最小化
+                      , anim: 5 //0-6的动画形式，-1不开启
+                      , content: ' <audio src="/' + src + '"controls="controls"></audio>'
+                        });
                     });
                 })
 
 
                 $(".txt").click(function () {
                     var src = $(this).find(".txtsrc").val();
-                    alert(src);
+                    //alert(src);
 
                     $.ajax({
                         url: "/Home/QueryTXT",
-                        data: JSON.stringify({ "FileID": src }),
+                        data: JSON.stringify({ "url": "\\"+src }),
                         type: "post",
                         contentType: "application/json",
                         success: function (data) {
-                            layer.open({
-                                type: 1 //Page层类型
-                                , area: ['700px', '400px']
-                                , title: ''
-                                , shade: 0.6 //遮罩透明度
-                                , maxmin: false //允许全屏最小化
-                                , anim: -1 //0-6的动画形式，-1不开启
-                                , content: '<div>' + data + '</div>'
+                            layer.msg('正在加载数据', {
+                                offset: ['70px', '620px'],
+                                time: 2000 //2秒关闭（如果不配置，默认是3秒
+                            }, function () {
+                                layer.open({
+                                    type: 1 //Page层类型
+                                    , area: ['700px', '400px']
+                                    , shade: 0.6 //遮罩透明度
+                                    , maxmin: false //允许全屏最小化
+                                    , anim: 0 //0-6的动画形式，-1不开启
+                                    , content: '<div>' + data + '</div>'
 
+                                });
                             });
 
                         }, error: function (result) {
@@ -356,69 +398,7 @@
                 sessionStorage.setItem("FID", input);
             }
             
-            //alert(input);
-            //$.ajax({
-            //    url: "/Home/OpenFolder2",
-            //    data: JSON.stringify({ "FolderName": input }),
-            //    type: "post",
-            //    contentType: "application/json",
-            //    success: function (data) {
-            //        $(".tbodys").empty();
-            //        if (data != null) {
-
-            //            $.each(data, function () {
-
-            //                $(".tbodys").append("<div style='overflow:auto;display:flex;border-bottom:1px solid #cbe6f5' class='paixu'> \
-            //                                    <div class='' style='width:55%;min-height:45px;padding-top:10px;padding-left:20px'>\
-            //                                    <input type='checkbox' name='a1'/>\
-            //                                    <a href='javascript:void' class='Folder'><img src='/Icon/Folder.png'/>"+this.Folder_Name+"</a></div>\
-            //                                    <div class='' style='width:15%;min-height:45px;padding-top:10px;padding-left:10px'>-</div>\
-            //                                    <div class='' style='width:30%;min-height:45px;padding-top:10px;padding-left:10px'>"+this.EstablishTime+"</div>\
-            //                                ");
-                       
-
-            //            });
-
-            //            $.ajax({
-            //                url: "/Home/OpenFolder3",
-            //                data: JSON.stringify({ "FolderName": input }),
-            //                type: "post",
-            //                contentType: "application/json",
-            //                success: function (data) {
-            //                    if (data != null) {
-            //                        $.each(data, function () {
-            //                            $(".tbodys").append("<div style='overflow:auto;display:flex;border-bottom:1px solid #cbe6f5' class='paixu'> \
-            //                                    <div class='' style='width:55%;min-height:45px;padding-top:10px;padding-left:20px'>\
-            //                                    <input type='checkbox' name='a1'>\
-            //                                    <a href='javascript:void'>\
-            //                                    <img src='" + this.icon + "'/>"+this.Real_FileName+"</a></div>\
-            //                                    <div class='' style='width:15%;min-height:45px;padding-top:10px;padding-left:10px'>" + this.File_Size + "</div>\
-            //                                    <div class='' style='width:30%;min-height:45px;padding-top:10px;padding-left:10px'>"+ this.EstablishTime + "</div>\
-            //                                ");
-                                   
-            //                        });
-                                
-
-            //                    }
-            //                    form.render();
-
-            //                }, error: function (result) {
-            //                    alert("Error" + result.responseText);
-            //                }
-            //            });
-
-            //            $(document).on("click", ".Folder", function () {
-            //                var input = $(this).text();
-            //                OpenFolder(input);
-
-            //            })
-            //        }
-            //        form.render();
-            //    }, error: function (result) {
-            //        alert("Error" + result.responseText);
-            //    }
-            //});
-            
+           
         }
 
 

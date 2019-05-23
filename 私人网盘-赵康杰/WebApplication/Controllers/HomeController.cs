@@ -4,25 +4,47 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Diagnostics;
+using Microsoft.Office.Interop.Word;
+using Microsoft.Office.Interop.Excel;
+
 
 namespace WebApplication.Controllers
 {
     public class HomeController : Controller
     {
         Services.Home Home = new Services.Home();
+        Services.Denglu Denglu = new Services.Denglu();
         // GET: Home
         public ActionResult Index()
         {
-            Model.User user = Session["User"] as Model.User;
-            //HttpCookie cookieUser = Request.Cookies["User"];
-            if (user != null)
+            try
             {
-                ViewBag.User = user.User_Name;
-                ViewBag.Folder = Home.GetFolderList(user.User_ID);
-                ViewBag.Skin = "default.css";
-                return View(Home.GetAll(user.User_ID));
+                if (Request.Cookies["MyCook"]["UserID"] != "")
+                {
+                    //获取用户id
+                    int UserID = Convert.ToInt32(Request.Cookies["MyCook"]["UserID"]);
+                    //根据用户id查询用户信息
+                    Model.User User = Denglu.GetUserByID(UserID);
+
+                    ViewBag.User = User;
+                    //用户所有文件夹
+                    ViewBag.Folder = Home.GetFolderList(UserID);
+                    //所有加载文件数量
+                    int Count = Home.GetFolderList(UserID).Count + Home.GetAll(UserID).Count;
+                    ViewBag.Count = Count;
+
+                    //所有文件
+                    return View(Home.GetAll(UserID));
+                }
             }
-            return RedirectToAction("Index","Denglu");
+            catch (Exception)
+            {
+
+                return RedirectToAction("Index", "Denglu");
+            }
+
+            return RedirectToAction("Index", "Denglu");
         }
 
         [HttpPost]
@@ -134,7 +156,7 @@ namespace WebApplication.Controllers
                         cg = cg + 1;
                         paths.Add(path);
 
-                        string[] icon = wenjian.Split('.');
+                        
                         //将文件信息保存到数据库
 
                         //覆盖重复文件
@@ -145,9 +167,10 @@ namespace WebApplication.Controllers
                             Home.DeleteOldFile(oldStore_data.Store_data_ID);
                         }
 
-                        string icons = Server.MapPath("~/Icon/" + icon[icon.Length - 1].ToUpper() + ".png/");
+                        string[] icon = wenjian.Split('.');
+                        string icons = Server.MapPath("~/Icon/" + icon[icon.Length - 1].ToUpper() + ".png");
                         Model.Store_data data = null;
-                        if (icons != null)
+                        if (System.IO.File.Exists(icons))
                         {
                             data = new Model.Store_data
                             {
@@ -194,7 +217,7 @@ namespace WebApplication.Controllers
                         paths.Add(path);
 
 
-                        string[] icon = filename.Split('.');
+                        
                         //将文件信息保存到数据库
 
                         //覆盖重复文件
@@ -204,9 +227,9 @@ namespace WebApplication.Controllers
                             System.IO.File.Delete(oldStore_data.DataRoute);
                             Home.DeleteOldFile(oldStore_data.Store_data_ID);
                         }
-
+                        string[] icon = filename.Split('.');
                         Model.Store_data data = null;
-                        if(System.IO.File.Exists(Server.MapPath("~/Icon/" + icon[icon.Length - 1].ToUpper() + ".png/")))
+                        if(System.IO.File.Exists(Server.MapPath("~/Icon/" + icon[icon.Length - 1].ToUpper() + ".png")))
                         {
                             data = new Model.Store_data
                             {
@@ -254,10 +277,10 @@ namespace WebApplication.Controllers
         /// <returns></returns>
         public ActionResult SignOut()
         {
-            Session["User"] = null;
-            HttpCookie myCookie = new HttpCookie("MyCook");
-            myCookie.Expires = DateTime.Now.AddDays(-1d);
-            return RedirectToAction("Index","Denglu");
+            HttpCookie myCookie = Request.Cookies["MyCook"];
+            myCookie.Expires = DateTime.Now.AddDays(-1);
+            System.Web.HttpContext.Current.Response.Cookies.Set(myCookie);
+            return RedirectToAction("Index", "Denglu");
 
         }
 
@@ -272,26 +295,12 @@ namespace WebApplication.Controllers
         /// </summary>
         /// <returns></returns>
         public ActionResult UpdatePwds(string NewPwd) {
-            Model.User user = Session["User"] as Model.User;
-            if(user!=null){
-                int jg = Home.UpdatePwd(NewPwd,user);
-                if(jg>0){
-                    user.User_Password = NewPwd;
-                    Session["User"] = user;
-                    return Json("1", JsonRequestBehavior.AllowGet);
-                }
-                return Json("0", JsonRequestBehavior.AllowGet);
-            }
+            Model.User user = new Model.User();
             user.User_Name = Request.Cookies["MyCook"]["UserName"];
             user.User_Password = Request.Cookies["MyCook"]["UserPwd"];
             int jg2 = Home.UpdatePwd(NewPwd, user);
-            if (jg2 > 0)
-            {
-                Request.Cookies["MyCook"]["UserPwd"] = NewPwd;
-                return Json("1", JsonRequestBehavior.AllowGet);
-            }
-            return Json("0", JsonRequestBehavior.AllowGet);
-            
+            return Json(jg2.ToString(), JsonRequestBehavior.AllowGet);
+
         }
 
         /// <summary>
@@ -300,8 +309,8 @@ namespace WebApplication.Controllers
         /// <param name="UserPwd"></param>
         /// <returns></returns>
         public ActionResult VerifyPassword(string UserPwd) {
-            Model.User user = Session["User"] as Model.User;
-            if(user.User_Password.Equals(UserPwd)){
+            string user = Request.Cookies["MyCook"]["UserPwd"].ToString();
+            if(user.Equals(UserPwd)){
                 return Json("1", JsonRequestBehavior.AllowGet);
             }
             return Json("0", JsonRequestBehavior.AllowGet);
@@ -461,6 +470,8 @@ namespace WebApplication.Controllers
                 //Request.Files.Count 文件数为0上传不成功
                 return View();
             }
+           
+           
 
             //文件大小不为0
             HttpFileCollectionBase files = Request.Files;
@@ -569,9 +580,9 @@ namespace WebApplication.Controllers
                             Home.DeleteOldFile(oldStore_data.Store_data_ID);
                         }
 
-                        string icons = Server.MapPath("~/Icon/" + icon[icon.Length - 1].ToUpper() + ".png/");
+                        string icons = Server.MapPath("~/Icon/" + icon[icon.Length - 1].ToUpper() + ".png");
                         Model.Store_data data = null;
-                        if (icons != null)
+                        if (System.IO.File.Exists(icons))
                         {
                             data = new Model.Store_data
                             {
@@ -630,9 +641,9 @@ namespace WebApplication.Controllers
                             Home.DeleteOldFile(oldStore_data.Store_data_ID);
                         }
 
-                        string icons = Server.MapPath("~/Icon/" + icon[icon.Length - 1].ToUpper() + ".png/");
+                        string icons = Server.MapPath("~/Icon/" + icon[icon.Length - 1].ToUpper() + ".png");
                         Model.Store_data data = null;
-                        if (icons != null)
+                        if (System.IO.File.Exists(icons))
                         {
                                 data = new Model.Store_data
                                 {
@@ -750,12 +761,140 @@ namespace WebApplication.Controllers
             
         }
 
-        public ActionResult QueryTXT(string FileID)
+        public ActionResult QueryTXT(string url)
         {
-            Model.Store_data data = Home.GetfileByid(Convert.ToInt32(FileID));
-            StreamReader str = new StreamReader(data.DataRoute, System.Text.Encoding.Default);
-            string input = str.ReadToEnd();
-            return Json(input, JsonRequestBehavior.AllowGet);
+
+
+            string physicalPath = Server.MapPath(Server.UrlDecode(url));
+            string extension = Path.GetExtension(physicalPath);
+ 
+            string htmlUrl = "";
+            switch(extension.ToLower())
+            {
+               case ".xls":
+               case ".xlsx":
+                   htmlUrl = PreviewExcel(physicalPath, url);
+                   break;
+               case ".doc":
+               case ".docx":
+                   htmlUrl = PreviewWord(physicalPath, url);
+                   break;
+               case ".txt":
+                   htmlUrl = PreviewTxt(physicalPath, url);
+                   return Json(htmlUrl, JsonRequestBehavior.AllowGet);
+                   
+               case ".pdf":
+                   htmlUrl = PreviewPdf(physicalPath, url);
+                   break;
+               case ".jpg":
+               case ".jpeg":
+               case ".bmp":
+               case ".gif":
+               case ".png":
+                   htmlUrl = PreviewImg(physicalPath, url);
+                   break;
+               default:
+                   htmlUrl = PreviewOther(physicalPath, url);
+                   break;
+            }
+            string urls = Url.Content(htmlUrl);
+            return Redirect(urls);
         }
+         /// <summary>
+        /// 预览Excel
+        /// </summary>
+        public string PreviewExcel(string physicalPath, string url)
+        {
+           Microsoft.Office.Interop.Excel.Application application = null;
+           Microsoft.Office.Interop.Excel.Workbook workbook = null;
+            application= new Microsoft.Office.Interop.Excel.Application();
+            object missing = Type.Missing;
+            object trueObject = true;
+           application.Visible = false;
+           application.DisplayAlerts = false;
+            workbook =application.Workbooks.Open(physicalPath, missing, trueObject, missing, missing,missing,
+               missing, missing, missing, missing, missing, missing, missing, missing,missing);
+            //Save Excelto Html
+            object format = Microsoft.Office.Interop.Excel.XlFileFormat.xlHtml;
+            string htmlName = Path.GetFileNameWithoutExtension(physicalPath) + ".html";
+            String outputFile = Path.GetDirectoryName(physicalPath) + "\\" + htmlName;
+           workbook.SaveAs(outputFile, format, missing, missing, missing,
+                             missing, XlSaveAsAccessMode.xlNoChange, missing,
+                             missing, missing, missing, missing);
+           workbook.Close();
+           application.Quit();
+            return Path.GetDirectoryName(Server.UrlDecode(url)) + "\\" + htmlName;
+        }
+
+         /// <summary>
+        /// 预览Word
+        /// </summary>
+        public string PreviewWord(string physicalPath, string url)
+        {
+           Microsoft.Office.Interop.Word._Application application = null;
+           Microsoft.Office.Interop.Word._Document doc = null;
+            application= new Microsoft.Office.Interop.Word.Application();
+            object missing = Type.Missing;
+            object trueObject = true;
+            application.Visible= false;
+           application.DisplayAlerts = WdAlertLevel.wdAlertsNone;
+            doc =application.Documents.Open(physicalPath, missing, trueObject, missing, missing,missing,
+               missing, missing, missing, missing, missing, missing, missing, missing,missing, missing);
+            //Save Excelto Html
+            object format = Microsoft.Office.Interop.Word.WdSaveFormat.wdFormatHTML;
+            string htmlName = Path.GetFileNameWithoutExtension(physicalPath) + ".html";
+            String outputFile = Path.GetDirectoryName(physicalPath) + "\\" + htmlName;
+           //doc.SaveAs2()
+           doc.SaveAs(outputFile, format, missing, missing, missing,
+                             missing, XlSaveAsAccessMode.xlNoChange, Type.Missing,
+                             missing, missing, missing, missing);
+            doc.Close();
+           application.Quit();
+            return Path.GetDirectoryName(Server.UrlDecode(url)) + "\\" + htmlName;
+        }
+        //Microsoft.Office.Core.MsoEncoding
+        /// <summary>
+        /// 预览Txt
+        /// </summary>
+        public string PreviewTxt(string physicalPath, string url)
+        {
+           
+             //存在则读取
+
+            StreamReader sr = new StreamReader(physicalPath, System.Text.Encoding.Default);
+             string outData = sr.ReadToEnd();
+             //关闭流
+             sr.Close();
+             return outData;
+            //return Server.UrlDecode(url);
+        }
+
+
+        /// <summary>
+        /// 预览Pdf
+        /// </summary>
+        public string PreviewPdf(string physicalPath, string url)
+        {
+            return Server.UrlDecode(url);
+        }
+
+        /// <summary>
+        /// 预览图片
+        /// </summary>
+        public string PreviewImg(string physicalPath, string url)
+        {
+            return Server.UrlDecode(url);
+        }
+
+         /// <summary>
+        /// 预览其他文件
+        /// </summary>
+        public string PreviewOther(string physicalPath, string url)
+        {
+            return Server.UrlDecode(url);
+        }
+
+
+        
     }
 }
